@@ -10,8 +10,8 @@
     "Dock":[1428,1444,178,194],
 
     "LockTarget":[1500,1519,177,197],
-    "OrbitTarget":[1425,1446,177,197],
-    "AprochTarget":[1354,1371,177,197],
+    "SelectItemThirdAction":[1425,1446,177,197],
+    "SelectItemFirstAction":[1354,1371,177,197],
 
     "LaunchDrones":[1871,1885,894,905],
     "ReturnDrones":[1871,1885,955,963],

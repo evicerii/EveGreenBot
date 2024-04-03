@@ -4,9 +4,9 @@ from adds.script import *
 from adds.decorators import *
 from adds.Value.settings import *
 class ship:
-    def __init__(self, name):
+    def __init__(self, name, modules):
         self.name = name
-        self.acceptMission=...
+        self.modules = modules
     @logs
     def Undock(self):
         mouseMove(UndockCoordinate.x,UndockCoordinate.y)
@@ -20,20 +20,20 @@ class ship:
         CheckWarp()
         print(f'{datetime.datetime.now()} end warp')       
     @logs
-    def ActiveModule(self, module=2):
+    def ActiveModule(self):
         fButton = [f1,f2,f3,f4,f5,f6]
-        for a in range(0,module):
+        for a in range(0,self.module):
             mouseMove(fButton[a].x,fButton[a].y)
             click()
     @reactionSleepTime
     @logs
     def OrbitTarget(self):
-        mouseMove(OrbitTarget.x,OrbitTarget.y)
+        mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
     @reactionSleepTime
     @logs
     def AprochTarget(self):
-        mouseMove(AprochTarget.x,AprochTarget.y)
+        mouseMove(SelectItemFirstAction.x,SelectItemFirstAction.y)
         click()
     @reactionSleepTime
     @logs
@@ -62,22 +62,15 @@ class ship:
         self.OrbitTarget()
         await asyncio.sleep(x*60+random.randint(1,60))
     @logs
-    def Dock(self):
+    def Dock(self, useWin):
         #alt+p = probe window доделать
-        mouseMove(StationWin.x,StationWin.y)
+        useWin.takeActive()
+        mouseMove(FirstTarget.x,FirstTarget.y)
         click()
-        mouseMove(DockMark.x,DockMark.y)
-        rightClick()
-        print(f'{datetime.datetime.now()} dock')
-        DockWarpMark=boxRelCoordinate(general['DockWarpMark'])
-        mouseMove(DockWarpMark.x,DockWarpMark.y)
+        mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
         CheckWarp()
         time.sleep(random.randint(3000,5000)/1000)
-        mouseMove(Station.x,Station.y)
-        click()
-        mouseMove(Dock.x,Dock.y)
-        click()
         CheckTarget(1763,318,630)
 class owerWin:
     def __init__(self, name, number):
@@ -124,23 +117,24 @@ class Anomaly:
     @logs
     def SelectAnomaly(self):
         Temp=green['FirstAnomalyCoord']
-        for AnomalyNumber in range(0,9):
+        for a in range(0,10):
             name = cvName(green['FirstAnomalyCoord'])
             if name in green['AnomalyList']:
-                mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y+(AnomalyNumber)*20)
+                mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y+(a)*20)
                 click()
                 CheckWarp()
                 green['FirstAnomalyCoord']=Temp
                 break
             else:
                 green['FirstAnomalyCoord'][1]=green['FirstAnomalyCoord'][1]+20
+                print(f'{datetime.datetime.now()} {name} not found')
             
-Ishtar=ship('Ishtar')
+Ishtar=ship('Ishtar',2)
 
 Nav=owerWin('nav',1)
 Farm=owerWin('farm',2)
 Loot=owerWin('loot',3)
-Test=owerWin('loot',5)
+Test=owerWin('test',5)
 
 IshtarCargo=cargo('IshtarCargo')
 GreenList=Anomaly('GreenList')
@@ -151,10 +145,10 @@ async def farm(ship,cargo,anomaly):
     ship.LaunchDrns()
     ship.ActiveModule()
     # cargo.dropMTU()
-    await ship.afk(20, Loot)
+    await ship.afk(20, Test)
     ship.ReturnDrns()
     # cargo.UpMTU()
-    ship.Dock()
+    ship.Dock(Nav)
 
 def DockActive():
     cargo.ClearCargo()

@@ -1,6 +1,6 @@
 from tkinter import *  
-from main.adds.decorators import *
-from main.adds.script import *
+from adds.decorators import *
+from adds.script import *
 
 window = Tk()  
 window.title("Общие настройки")  

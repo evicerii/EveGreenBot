@@ -29,8 +29,8 @@ def SelectCharWin(charNum):
 def CheckWarp():
     time.sleep(7)
     while True:
-        x=924
-        y=991
+        x=963
+        y=995
         rgb1 = pag.pixel(x,y)
         rgb1 = sum(rgb1)
         if 700<rgb1<710:
@@ -50,7 +50,7 @@ def cvName(temp):
     Temp=Image.open('Temp.png')
     Text = pytesseract.image_to_string(Temp, lang='eng')
     Text=Text[:-1]
-    # os.remove('Temp.png')
+    os.remove('Temp.png')
     return Text
 def CheckLocal():
     for y in range(770,960):

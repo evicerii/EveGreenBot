@@ -1,5 +1,9 @@
 import pyautogui as pag
-rgb1 = sum(pag.pixel(476,899))
+import time
+while True:
+    rgb1 = sum(pag.pixel(963,995))
+    print(rgb1)
+    time.sleep(1)
 print(rgb1)
 def CheckLocal():
     for y in range(770,960):
