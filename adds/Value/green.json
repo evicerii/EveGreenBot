@@ -1,0 +1,8 @@
+{
+    "AnomalyCoord": [930,1020,413,433],
+    "FirstAnomalyCoord": [930,413,90,20],
+
+    "FirstAnomalyWarp":[1124,1143,413,433],
+
+    "AnomalyList": ["Guristas Burr"]
+}
