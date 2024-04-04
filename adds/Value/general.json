@@ -10,8 +10,11 @@
     "Dock":[1428,1444,178,194],
 
     "LockTarget":[1500,1519,177,197],
-    "SelectItemThirdAction":[1425,1446,177,197],
     "SelectItemFirstAction":[1354,1371,177,197],
+    "SelectItemThirdAction":[1425,1446,177,197],
+    "SelectItemFourthAction":[1462,1482,177,197],
+
+    "NothingFound":[1547,320,150,30],
 
     "LaunchDrones":[1871,1885,894,905],
     "ReturnDrones":[1871,1885,955,963],
@@ -34,19 +37,22 @@
     "f5":[1254,1281,881,905],
     "f6":[1307,1330,881,905],
 
-    "FirstTarget": [1405,1781,303,326],
+    "FirstTarget": [1405,1781,305,325],
+    "ScopeToCargo": [30,121,298,310],
+
     "FirstItem": [260,321,381,443],
 
     "SelectAllField":[323,338,383,438],
 
     "RightFirstRow":[30,121,15,30],
+    "DropMTU":[30,121,200,215],
     
-    "OwerWindow1": [1348, 1354, 250, 261],
-    "OwerWindow2": [1380, 1386, 250, 261],
-    "OwerWindow3": [1413, 1419, 250, 261],
-    "OwerWindow4": [1445, 1451, 250, 261],
-    "OwerWindow5": [1475, 1481, 250, 261],
-    "OwerWindow6": [1508, 1514, 250, 261],
+    "OwerWindow1": [1350, 1354, 250, 261],
+    "OwerWindow2": [1382, 1386, 250, 261],
+    "OwerWindow3": [1415, 1419, 250, 261],
+    "OwerWindow4": [1446, 1450, 250, 261],
+    "OwerWindow5": [1476, 1480, 250, 261],
+    "OwerWindow6": [1509, 1513, 250, 261],
 
     "LaunchWin":[-1404,-1325,366,382],
     "CloseEve":[1885,1915,2,18]

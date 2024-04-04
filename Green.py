@@ -22,13 +22,13 @@ class ship:
     @logs
     def ActiveModule(self):
         fButton = [f1,f2,f3,f4,f5,f6]
-        for a in range(0,self.module):
+        for a in range(0,self.modules):
             mouseMove(fButton[a].x,fButton[a].y)
             click()
     @reactionSleepTime
     @logs
     def OrbitTarget(self):
-        mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
+        mouseMove(SelectItemFourthAction.x,SelectItemFourthAction.y)
         click()
     @reactionSleepTime
     @logs
@@ -55,12 +55,13 @@ class ship:
         while color==500:
             color=sum(pag.pixel(1529,991))
             time.sleep(1)
-    async def afk(self, x, useWin):
-        useWin.takeActive()
+    async def afk(self):
+        Loot.takeActive()
         mouseMove(FirstTarget.x,FirstTarget.y)
         click()
         self.OrbitTarget()
-        await asyncio.sleep(x*60+random.randint(1,60))
+        Farm.takeActive()
+        await asyncio.sleep(60+random.randint(1,60))
     @logs
     def Dock(self, useWin):
         #alt+p = probe window доделать
@@ -80,40 +81,6 @@ class owerWin:
         owerWindow = [OwerWindow1, OwerWindow2, OwerWindow3, OwerWindow4, OwerWindow5, OwerWindow6]
         mouseMove(owerWindow[self.number].x,owerWindow[self.number].y)
         click()
-    def checkElement(self):
-        ...
-class cargo:
-    def __init__(self, name):
-        self.name = name
-        self.position =...
-    def takeActive(self):
-        mouseMove(self.position.x,self.position.y)
-        click()
-    @logs
-    def dropMTU(self):
-        mouseMove(FirstItem.x,FirstItem.y)
-        rightClick()
-        DropItem=boxRelCoordinate(general['RightFirstRow'])
-        mouseMove(DropItem.x,DropItem.y)
-        click()
-    @logs
-    def UpMTU(self, usewin):
-        mouseMove(usewin.x,usewin.y)
-        click()
-        mouseMove(FirstItem.x,FirstItem.y)
-        rightClick()
-    @logs
-    def ClearCargo(self):
-        mouseMove(SelectAllField.x,SelectAllField.y)
-        rightClick()
-        SelectAll=boxRelCoordinate(general['RightFirstRow'])
-        mouseMove(SelectAll.x,SelectAll.y)
-        click()
-        mouseMove(FirstItem.x,FirstItem.y)
-        dragNdrop(Hangars.x,Hangars.y)       
-class Anomaly:
-    def __init__(self, name):
-        self.name = name
     @logs
     def SelectAnomaly(self):
         Temp=green['FirstAnomalyCoord']
@@ -128,6 +95,49 @@ class Anomaly:
             else:
                 green['FirstAnomalyCoord'][1]=green['FirstAnomalyCoord'][1]+20
                 print(f'{datetime.datetime.now()} {name} not found')
+    def checkElement(self):
+        ...
+class cargo:
+    def __init__(self, name):
+        self.name = name
+        self.position =...
+    def takeActive(self):
+        mouseMove(self.position.x,self.position.y)
+        click()
+    @logs
+    def dropMTU(self):
+        mouseMove(FirstItem.x,FirstItem.y)
+        rightClick()
+        DropMTU=boxRelCoordinate(general['DropMTU'])
+        mouseMove(DropMTU.x,DropMTU.y)
+        click()
+    @logs
+    def UpMTU(self):
+        Loot.takeActive()
+        mouseMove(FirstTarget.x,FirstTarget.y)
+        rightClick()
+        ScopeToCargo=boxRelCoordinate(general['ScopeToCargo'])
+        mouseMove(ScopeToCargo.x,ScopeToCargo.y)
+        click()
+        while True:
+            if cvName(general['NothingFound'])=='Nothing Found':
+                break
+            else:
+                time.sleep(5)
+    @logs
+    def ClearCargo(self):
+        mouseMove(SelectAllField.x,SelectAllField.y)
+        rightClick()
+        SelectAll=boxRelCoordinate(general['RightFirstRow'])
+        mouseMove(SelectAll.x,SelectAll.y)
+        click()
+        mouseMove(FirstItem.x,FirstItem.y)
+        dragNdrop(Hangars.x,Hangars.y)       
+class Anomaly:
+    def __init__(self, name, workTime):
+        self.name = name
+        self.workTime = workTime
+
             
 Ishtar=ship('Ishtar',2)
 
@@ -135,19 +145,20 @@ Nav=owerWin('nav',1)
 Farm=owerWin('farm',2)
 Loot=owerWin('loot',3)
 Test=owerWin('test',5)
+AnomalyWin=owerWin('anomaly',6)
 
 IshtarCargo=cargo('IshtarCargo')
-GreenList=Anomaly('GreenList')
+GuristasBurr=Anomaly('Guristas Burr', 2)
 
-async def farm(ship,cargo,anomaly):
+async def farm(ship,cargo):
     ship.Undock()
-    anomaly.SelectAnomaly()
+    AnomalyWin.SelectAnomaly()
     ship.LaunchDrns()
     ship.ActiveModule()
-    # cargo.dropMTU()
-    await ship.afk(20, Test)
+    cargo.dropMTU()
+    await ship.afk()
     ship.ReturnDrns()
-    # cargo.UpMTU()
+    cargo.UpMTU()
     ship.Dock(Nav)
 
 def DockActive():
@@ -161,7 +172,7 @@ async def main():
         if actualNum!=1:
             SelectCharWin(actualNum)
 
-        await farm(Ishtar, IshtarCargo, GreenList)
+        await farm(Ishtar, IshtarCargo)
 
         worked=nowTime-startTime
         break
