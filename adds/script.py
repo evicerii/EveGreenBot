@@ -50,7 +50,7 @@ def cvName(temp):
     Temp=Image.open('Temp.png')
     Text = pytesseract.image_to_string(Temp, lang='eng')
     Text=Text[:-1]
-    # os.remove('Temp.png')
+    os.remove('Temp.png')
     return Text
 def CheckLocal():
     for y in range(770,960):
