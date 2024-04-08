@@ -13,5 +13,5 @@ def reactionSleepTime(fn):
 def logs(fn):
     def wrapper(*args, **kwargs):
         fn(*args, **kwargs)
-        print(f'{datetime.datetime.now()}  {fn.__name__} {asyncio.current_task().get_name()} window')
+        print(f'{datetime.datetime.now()}  {fn.__name__}')
     return wrapper

@@ -19,11 +19,11 @@ class owerWin:
                 mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y+(a)*20)
                 click()
                 CheckWarp()
-                green['FirstAnomalyCoord']=Temp
                 break
             else:
                 green['FirstAnomalyCoord'][1]=green['FirstAnomalyCoord'][1]+20
                 print(f'{datetime.datetime.now()} {name} not found')
+        green['FirstAnomalyCoord']=Temp
     def checkElement(self):
         ...
 

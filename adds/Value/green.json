@@ -1,8 +1,8 @@
 {
-    "AnomalyCoord": [930,1020,413,433],
-    "FirstAnomalyCoord": [930,413,90,20],
+    "AnomalyCoord": [930,1020,415,433],
+    "FirstAnomalyCoord": [930,415,90,20],
 
-    "FirstAnomalyWarp":[1124,1143,413,433],
+    "FirstAnomalyWarp":[1110,1125,415,433],
 
-    "AnomalyList": ["Guristas Burr","Fread Assault","Emergency Ait","Suspicious Sig","Guristas Hides","Abyssal Artife","Guristas Refu"]
+    "AnomalyList": ["Angel Port","Angel Hub","Angel Hidden","Angel Forlorn"]
 }

@@ -41,3 +41,4 @@ class cargo:
         dragNdrop(Hangars.x,Hangars.y)       
 
 IshtarCargo=cargo('IshtarCargo')
+GilaCargo=cargo('GilaCargo')
