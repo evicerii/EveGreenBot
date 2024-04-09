@@ -1,4 +1,5 @@
-from multiprocessing import Process, Pipe, Event
+import threading
+
 from adds.coordinate import *
 from adds.script import *
 from adds.decorators import *
@@ -12,87 +13,90 @@ from Classes.Cargo import *
 import time
 import os
 
-def CheckLocal(event):
+def CheckLocal(CheckLocalEvent,locker):
+    print('start checking local')
     while True:
+        for n in range(765,953):
+            #Проврка тикеров в чате
+            if (sum(pag.pixel(318,n))==195 or sum(pag.pixel(318,n))==223 or sum(pag.pixel(318,n))==330):
+                #Если корабль не в варпе установить флаг чата
+                if not locker.is_set():
+                    CheckLocalEvent.set()
+                    print('Set Flag')
+            else:
+                CheckLocalEvent.clear()
         time.sleep(1)
-        if cvName(general['CheckLocal'])=="Local":
-            event.clear()
-        else:
-            event.set()
-            print('dunger')
 def BotExit() :
     ...     
-def StopFarm(connection, CheckLocal, ProcessKill, UndockEvent, DronsLaunched, ship):
-    FarmPID=...
+def StopFarm(DockEvent, UndockEvent, DronsLaunched, ship):
     while True:
-        time.sleep(5)
-
-        while True:
-            if FarmPID != 0:
-                FarmPID = connection.recv()
-                print(FarmPID)
-            else:
-                break
-
-        #Если нейтрал в локале
-        if CheckLocal.is_set():
+        time.sleep(1)
+        #Если нейтрал в локале и корабль не в варпе
+        if DockEvent.is_set():
             #Если корабль андокнулся
             if UndockEvent.is_set():
-                os.system(f"taskkill /PID {FarmPID} /T /F")
-                FarmPID=0
                 #Если дроны запущены вернуть
                 if DronsLaunched.is_set():
                     ship.ReturnDrns()
-
-            ship.Dock(Nav)
+                ship.Dock(Nav)
             time.sleep(120)
-            #Добавить флаг убитого процесса
-            ProcessKill.set()
-def BotLoop(connection, ProcessKill, UndockFlag, CheckDrons, ship):
-    #Убирает флаг убитого процесса
-    ProcessKill.clear()
-
-    connection.send(os.getpid())
+            DockEvent.clear()
+            print('Stopping Farm')
+def BotLoop(CheckLocalEvent, DockEvent, UndockEvent, CheckDrons, ship):
     time.sleep(5)
+    if CheckLocalEvent.is_set():
+        DockEvent.set()
+        return
     #Флаг андокнутого корабля
     ship.Undock()
-    UndockFlag.set()
+    UndockEvent.set()
+    if CheckLocalEvent.is_set():
+        DockEvent.set()
+        return
 
     ship.ActiveDefModule()
 
     while True:
         #select&warp
-        AnomalyWin.SelectAnomaly()
+        AnomalyWin.SelectAnomaly(locker)
+
+        
+        if CheckLocalEvent.is_set():
+            DockEvent.set()
+            return
         #Флаг запущенных дронов
         ship.LaunchDrns()
         CheckDrons.set()
-        
-        ship.ActivePropModule()
 
         Structure.takeActive()
         ship.OrbitTarget(FirstTarget)
         Farm.takeActive()
         while cvName(general['NothingFound'])!= "Nothing Found":
             time.sleep(5)
+            if CheckLocalEvent.is_set():
+                DockEvent.set()
+                return
         ship.ReturnDrns()
+        time.sleep(random.randint(60,65))
 
 if __name__ == '__main__':
-    CheckLocalEvent = Event()
-    BotLoopEvent = Event()
-    UndockEvent = Event()
-    DronesLaunchedEvent = Event()
+    CheckLocalEvent = threading.Event()
+    UndockEvent = threading.Event()
+    DronesLaunchedEvent = threading.Event()
+    locker=threading.Event()
+    DockEvent = threading.Event()
 
-    parent_conn, child_conn = Pipe(duplex=True)
-
-    CheckLocalProcess = Process(target=CheckLocal, args=(CheckLocalEvent,))
+    # parent_conn, child_conn = Pipe(duplex=True)
     # BotExitProcess = Process(target=BotExit, args=(BotLoopEvent,))
-    StopFarmProcess = Process(target=StopFarm, args=(parent_conn, CheckLocalEvent, BotLoopEvent, UndockEvent, DronesLaunchedEvent, Gila))
-    BotLoopProcess = Process(target=BotLoop, args=(child_conn, BotLoopEvent, UndockEvent, DronesLaunchedEvent, Gila))
 
+    CheckLocalProcess = threading.Thread(target=CheckLocal, args=(CheckLocalEvent, locker), daemon=True)
+    StopFarmProcess = threading.Thread(target=StopFarm, args=(DockEvent, UndockEvent, DronesLaunchedEvent, Gila))
+    BotLoopProcess = threading.Thread(target=BotLoop, args=(CheckLocalEvent, UndockEvent, DockEvent, DronesLaunchedEvent, Gila), daemon=True)
+    
     proc = [CheckLocalProcess, StopFarmProcess, BotLoopProcess]
     [p.start() for p in proc]
     [p.join() for p in proc]
 
     while True:
-        if BotLoopEvent.is_set():
+        if not DockEvent.is_set():
             BotLoopProcess.start()

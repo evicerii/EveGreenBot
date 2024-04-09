@@ -26,8 +26,19 @@ def SelectCharWin(charNum):
             time.sleep(random.randint(500,1000)/1000)
             pag.keyUp('win')
             print(f'{datetime.datetime.now()}  use {(charNum)} win')
-def CheckWarp():
-    time.sleep(7)
+def CheckWarp(locker):
+    #запретить взаимодействие на время варпа
+    locker.set()
+    while True:
+        x=963
+        y=995
+        rgb1 = pag.pixel(x,y)
+        rgb1 = sum(rgb1)
+        if 700<rgb1<710:
+            time.sleep(1)
+            break
+        else:
+            time.sleep(5)
     while True:
         x=963
         y=995
@@ -38,6 +49,7 @@ def CheckWarp():
         else:
             time.sleep(5)
             break
+    locker.clear()
 def CheckTarget(x, y, z):
     while True:
         time.sleep(random.randint(3,5))

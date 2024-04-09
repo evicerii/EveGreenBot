@@ -13,11 +13,11 @@ class ship:
             CheckTarget(894,863,331)
             time.sleep(1)
     @logs
-    def WarpTo(self):
+    def WarpTo(self, locker):
         mouseMove(WarpTo.x,WarpTo.y)
         click()
         print(f'{datetime.datetime.now()} start warp')
-        CheckWarp()
+        CheckWarp(locker)
         print(f'{datetime.datetime.now()} end warp')     
         time.sleep(1) 
     @logs
@@ -62,23 +62,23 @@ class ship:
     def ReturnDrns(self):
         mouseMove(ReturnDrones.x,ReturnDrones.y)
         click()
-        
-        time.sleep(2)
-        color=500
+        time.sleep(1)
+        color=...
+        while color!=500:
+            color=sum(pag.pixel(1529,991))
+            time.sleep(1)
         while color==500:
             color=sum(pag.pixel(1529,991))
             time.sleep(1)
     @logs
-    def Dock(self, useWin):
+    def Dock(self, useWin, locker):
         #alt+p = probe window доделать
         useWin.takeActive()
         mouseMove(FirstTarget.x,FirstTarget.y)
         click()
         mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
-        CheckWarp()
-        time.sleep(random.randint(3000,5000)/1000)
         CheckTarget(1763,318,630)
 
 Ishtar=ship('Ishtar',2)
-Gila=ship('Gila',2)
+Gila=ship('Gila',3)
