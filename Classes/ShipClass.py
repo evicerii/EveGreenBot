@@ -71,7 +71,7 @@ class ship:
             color=sum(pag.pixel(1529,991))
             time.sleep(1)
     @logs
-    def Dock(self, useWin, locker):
+    def Dock(self, useWin):
         #alt+p = probe window доделать
         useWin.takeActive()
         mouseMove(FirstTarget.x,FirstTarget.y)

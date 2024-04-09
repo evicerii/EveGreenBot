@@ -4,9 +4,9 @@ from .coordinate import *
 import time
 import datetime
 import pytesseract
+import os
 from PIL import Image
 import pyautogui as pag
-import os
 from .decorators import logs
 import adds.Value.settings as settings
 
@@ -62,8 +62,12 @@ def cvName(temp):
     Temp=Image.open('Temp.png')
     Text = pytesseract.image_to_string(Temp, lang='eng')
     Text=Text[:-1]
-    # os.remove('Temp.png')
+    os.remove('Temp.png')
     return Text
+def checkRedCross():
+    for n in range(310, 326):
+        if sum(pag.pixel(1359,n))==259:
+            return True
 def CheckLocal():
     for y in range(770,960):
         if sum(pag.pixel(476,y)) in range[193,223,330]:

@@ -11,7 +11,7 @@ class owerWin:
         mouseMove(owerWindow[self.number].x,owerWindow[self.number].y)
         click()
     @logs
-    def SelectAnomaly(self, locker):
+    def SelectAnomaly(self, locker, ship):
         Temp=green['FirstAnomalyCoord'][1]
         for a in range(0,10):
             name = cvName(green['FirstAnomalyCoord'])
@@ -22,7 +22,8 @@ class owerWin:
                 break
             else:
                 green['FirstAnomalyCoord'][1]=green['FirstAnomalyCoord'][1]+20
-                print(f'{datetime.datetime.now()} {name} not found')
+            if a==9:
+                ship.Dock(Nav)
         green['FirstAnomalyCoord'][1]=Temp
     def checkElement(self):
         ...
