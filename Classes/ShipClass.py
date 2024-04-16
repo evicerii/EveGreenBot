@@ -2,6 +2,8 @@ from adds.coordinate import *
 from adds.script import *
 from adds.decorators import *
 
+from Classes.OwerWin import *
+
 class ship:
     def __init__(self, name, modules):
         self.name = name
@@ -64,21 +66,25 @@ class ship:
         click()
         time.sleep(1)
         color=...
-        while color!=500:
-            color=sum(pag.pixel(1529,991))
-            time.sleep(1)
+        time.sleep(3)
         while color==500:
             color=sum(pag.pixel(1529,991))
+            print(f'{datetime.datetime.now()} color {color} 2')
             time.sleep(1)
     @logs
-    def Dock(self, useWin):
+    def Dock(self):
         #alt+p = probe window доделать
-        useWin.takeActive()
+        Nav.takeActive()
         mouseMove(FirstTarget.x,FirstTarget.y)
         click()
         mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
         CheckTarget(1763,318,630)
-
+    def DangerShield(self,status):
+        time.sleep(1)
+        if (700<sum(pag.pixel(935,877))) and (sum(pag.pixel(935,877))<710):
+            status.clear()
+        else:
+            status.set()
 Ishtar=ship('Ishtar',2)
 Gila=ship('Gila',3)

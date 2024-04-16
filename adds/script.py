@@ -65,7 +65,7 @@ def cvName(temp):
     os.remove('Temp.png')
     return Text
 def checkRedCross():
-    for n in range(310, 326):
+    for n in range(300, 330):
         if sum(pag.pixel(1359,n))==259:
             return True
 def CheckLocal():

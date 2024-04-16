@@ -14,17 +14,25 @@ import time
 import os
 
 def CheckLocal():
-    print('start checking local')
     while True:
-        for n in range(765,953):
-            #Проврка тикеров в чате
-            if (sum(pag.pixel(318,n))==195 or sum(pag.pixel(318,n))==223 or sum(pag.pixel(318,n))==330):
+        #первая иконка
+        n=775
+        while 774<n and n<953:
+            #Проврка тикеров в чате /red,orange,grey
+            if (pag.pixel(322,n)==(117, 10, 10) or pag.pixel(322,n)==(153, 60, 10) or pag.pixel(322,n)==(110,110,110)):
                 #Если корабль не в варпе установить флаг чата
                 if not locker.is_set():
                     CheckLocalEvent.set()
-                    time.sleep(1)
+                    break
             else:
                 CheckLocalEvent.clear()
+        print(f'{datetime.datetime.now()} local {CheckLocalEvent.is_set()}')
+        #шаг иконок персонажей
+        n+=17
+        time.sleep(1)
+def ShieldStatus(ship,status):
+    while True:
+        ship.DangerShield(status)
         time.sleep(1)
 def BotExit() :
     ...     
@@ -38,11 +46,13 @@ def StopFarm(ship):
                 #Если дроны запущены вернуть
                 if DronesLaunchedEvent.is_set():
                     ship.ReturnDrns()
-                ship.Dock(Nav)
+                    print(f'{datetime.datetime.now()} return drones')
+                ship.Dock()
+                print(f'{datetime.datetime.now()} ship dock')
             time.sleep(120)
             DockEvent.clear()
             print('Stopping Farm')
-def BotLoop(ship):
+def BotLoop(ship, ShieldStatusProcess):
     time.sleep(5)
     if CheckLocalEvent.is_set():
         DockEvent.set()
@@ -72,16 +82,22 @@ def BotLoop(ship):
         Farm.takeActive()
         while True:
             if checkRedCross():
+                ...
+            else:
+                print(f'{datetime.datetime.now()} red cross not detected')
                 break
             time.sleep(5)
-            if CheckLocalEvent.is_set():
+            if CheckLocalEvent.is_set() or ShieldStatusEvent.is_set():
                 DockEvent.set()
+                time.sleep(1)
                 return
         ship.ReturnDrns()
+        print(f'{datetime.datetime.now()} end cyrcle')
         time.sleep(random.randint(60,65))
 
 if __name__ == '__main__':
     CheckLocalEvent = threading.Event()
+    ShieldStatusEvent=threading.Event()
     UndockEvent = threading.Event()
     DronesLaunchedEvent = threading.Event()
     locker=threading.Event()
@@ -91,10 +107,12 @@ if __name__ == '__main__':
     # BotExitProcess = Process(target=BotExit, args=(BotLoopEvent,))
 
     CheckLocalProcess = threading.Thread(target=CheckLocal, daemon=True)
+    ShieldStatusProcess = threading.Thread(target=ShieldStatus, args=(Gila,ShieldStatusEvent,), daemon=True)
     StopFarmProcess = threading.Thread(target=StopFarm, args=(Gila,))
-    BotLoopProcess = threading.Thread(target=BotLoop, args=(Gila,), daemon=True)
-    
-    proc = [CheckLocalProcess, StopFarmProcess, BotLoopProcess]
+    BotLoopProcess = threading.Thread(target=BotLoop, args=(Gila, ShieldStatusProcess), daemon=True)
+
+
+    proc = [CheckLocalProcess, ShieldStatusProcess, StopFarmProcess, BotLoopProcess]
     [p.start() for p in proc]
     [p.join() for p in proc]
 

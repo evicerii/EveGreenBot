@@ -1,11 +1,7 @@
 import win32gui
 from numpy import *
-import json
-
-with open('./adds/Value/general.json',"r",encoding="utf-8") as json_file:
-    general = json.load(json_file)
-with open('./adds/Value/green.json',"r",encoding="utf-8") as json_file:
-    green = json.load(json_file)
+from adds.Value.general import *
+from adds.Value.green import *
 
 class boxCoordinate:
     def __init__(self, data):
@@ -21,44 +17,44 @@ class boxRelCoordinate:
         self.y=y+startY
 
 #Static Coordinate
-UndockCoordinate=boxCoordinate(general['Undock'])
-WarpTo=boxCoordinate(general['WarpTo'])
-LockTarget=boxCoordinate(general['LockTarget'])
-SelectItemFirstAction=boxCoordinate(general['SelectItemFirstAction'])
-SelectItemThirdAction=boxCoordinate(general['SelectItemThirdAction'])
-SelectItemFourthAction=boxCoordinate(general['SelectItemFourthAction'])
-FirstTarget=boxCoordinate(general['FirstTarget'])
-FirstItem=boxCoordinate(general['FirstItem'])
-SelectAllField=boxCoordinate(general['SelectAllField'])
-# NavOwerWindow=boxCoordinate(general['NavOwerWindow'])
-f1=boxCoordinate(general['f1'])
-f2=boxCoordinate(general['f2'])
-f3=boxCoordinate(general['f3'])
-f4=boxCoordinate(general['f4'])
-f5=boxCoordinate(general['f5'])
-f6=boxCoordinate(general['f6'])
+UndockCoordinate=boxCoordinate(Undock)
+WarpTo=boxCoordinate(WarpTo)
+LockTarget=boxCoordinate(LockTarget)
+SelectItemFirstAction=boxCoordinate(SelectItemFirstAction)
+SelectItemThirdAction=boxCoordinate(SelectItemThirdAction)
+SelectItemFourthAction=boxCoordinate(SelectItemFourthAction)
+FirstTarget=boxCoordinate(FirstTarget)
+FirstItem=boxCoordinate(FirstItem)
+SelectAllField=boxCoordinate(SelectAllField)
+# NavOwerWindow=boxCoordinate(NavOwerWindow)
+f1=boxCoordinate(f1)
+f2=boxCoordinate(f2)
+f3=boxCoordinate(f3)
+f4=boxCoordinate(f4)
+f5=boxCoordinate(f5)
+f6=boxCoordinate(f6)
 
-OwerWindow1=boxCoordinate(general['OwerWindow1'])
-OwerWindow2=boxCoordinate(general['OwerWindow2'])
-OwerWindow3=boxCoordinate(general['OwerWindow3'])
-OwerWindow4=boxCoordinate(general['OwerWindow4'])
-OwerWindow5=boxCoordinate(general['OwerWindow5'])
-OwerWindow6=boxCoordinate(general['OwerWindow6'])
+OwerWindow1=boxCoordinate(OwerWindow1)
+OwerWindow2=boxCoordinate(OwerWindow2)
+OwerWindow3=boxCoordinate(OwerWindow3)
+OwerWindow4=boxCoordinate(OwerWindow4)
+OwerWindow5=boxCoordinate(OwerWindow5)
+OwerWindow6=boxCoordinate(OwerWindow6)
 
 
-Dock=boxCoordinate(general['Dock'])
-DockMark=boxCoordinate(general['DockMark'])
-StationWin=boxCoordinate(general['StationWin'])
-Station=boxCoordinate(general['Station'])
-Hangars=boxCoordinate(general['Hangars'])
-ShipHangar=boxCoordinate(general['ShipHangar'])
-ShipSearch=boxCoordinate(general['ShipSearch'])
-ActualShip=boxCoordinate(general['ActualShip'])
-HangarCargo=boxCoordinate(general['HangarCargo'])
-LaunchDrones=boxCoordinate(general['LaunchDrones'])
-ReturnDrones=boxCoordinate(general['ReturnDrones'])
-LaunchWin=boxCoordinate(general['LaunchWin'])
-CloseEve=boxCoordinate(general['CloseEve'])
+Dock=boxCoordinate(Dock)
+DockMark=boxCoordinate(DockMark)
+StationWin=boxCoordinate(StationWin)
+Station=boxCoordinate(Station)
+Hangars=boxCoordinate(Hangars)
+ShipHangar=boxCoordinate(ShipHangar)
+ShipSearch=boxCoordinate(ShipSearch)
+ActualShip=boxCoordinate(ActualShip)
+HangarCargo=boxCoordinate(HangarCargo)
+LaunchDrones=boxCoordinate(LaunchDrones)
+ReturnDrones=boxCoordinate(ReturnDrones)
+LaunchWin=boxCoordinate(LaunchWin)
+CloseEve=boxCoordinate(CloseEve)
 
-AnomalyCoord=boxCoordinate(green['AnomalyCoord'])
-FirstAnomalyWarp=boxCoordinate(green['FirstAnomalyWarp'])
+AnomalyCoord=boxCoordinate(AnomalyCoord)
+FirstAnomalyWarp=boxCoordinate(FirstAnomalyWarp)

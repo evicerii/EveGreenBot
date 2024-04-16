@@ -12,19 +12,19 @@ class owerWin:
         click()
     @logs
     def SelectAnomaly(self, locker, ship):
-        Temp=green['FirstAnomalyCoord'][1]
+        Temp=FirstAnomalyCoord[1]
         for a in range(0,10):
-            name = cvName(green['FirstAnomalyCoord'])
-            if name in green['AnomalyList']:
+            name = cvName(FirstAnomalyCoord)
+            if name in AnomalyList:
                 mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y+(a)*20)
                 click()
                 CheckWarp(locker)
                 break
             else:
-                green['FirstAnomalyCoord'][1]=green['FirstAnomalyCoord'][1]+20
+                FirstAnomalyCoord[1]=FirstAnomalyCoord[1]+20
             if a==9:
                 ship.Dock(Nav)
-        green['FirstAnomalyCoord'][1]=Temp
+        FirstAnomalyCoord[1]=Temp
     def checkElement(self):
         ...
 

@@ -14,7 +14,7 @@ class cargo:
     def dropMTU(self):
         mouseMove(FirstItem.x,FirstItem.y)
         rightClick()
-        DropMTU=boxRelCoordinate(general['DropMTU'])
+        DropMTU=boxRelCoordinate(DropMTU)
         mouseMove(DropMTU.x,DropMTU.y)
         click()
     @logs
@@ -22,11 +22,11 @@ class cargo:
         Loot.takeActive()
         mouseMove(FirstTarget.x,FirstTarget.y)
         rightClick()
-        ScopeToCargo=boxRelCoordinate(general['ScopeToCargo'])
+        ScopeToCargo=boxRelCoordinate(ScopeToCargo)
         mouseMove(ScopeToCargo.x,ScopeToCargo.y)
         click()
         while True:
-            if cvName(general['NothingFound'])=='Nothing Found':
+            if cvName(NothingFound)=='Nothing Found':
                 break
             else:
                 time.sleep(5)
@@ -34,7 +34,7 @@ class cargo:
     def ClearCargo(self):
         mouseMove(SelectAllField.x,SelectAllField.y)
         rightClick()
-        SelectAll=boxRelCoordinate(general['RightFirstRow'])
+        SelectAll=boxRelCoordinate(RightFirstRow)
         mouseMove(SelectAll.x,SelectAll.y)
         click()
         mouseMove(FirstItem.x,FirstItem.y)
