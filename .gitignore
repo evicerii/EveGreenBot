@@ -3,6 +3,6 @@
 /test.py
 /Temp.png
 /__pycache__
-/adds.__pycache__
-/adds.Value.__pycache__
-/Classes.__pycache__
+/adds/__pycache__
+/adds/Value/__pycache__
+/Classes/__pycache__
