@@ -16,19 +16,16 @@ import os
 def CheckLocal():
     while True:
         #первая иконка
-        n=775
-        while 774<n and n<953:
+        for n in range(775,953,17):
             #Проврка тикеров в чате /red,orange,grey
             if (pag.pixel(322,n)==(117, 10, 10) or pag.pixel(322,n)==(153, 60, 10) or pag.pixel(322,n)==(110,110,110)):
                 #Если корабль не в варпе установить флаг чата
                 if not locker.is_set():
                     CheckLocalEvent.set()
+                    print(f'{datetime.datetime.now()} local red')
                     break
             else:
                 CheckLocalEvent.clear()
-        print(f'{datetime.datetime.now()} local {CheckLocalEvent.is_set()}')
-        #шаг иконок персонажей
-        n+=17
         time.sleep(1)
 def ShieldStatus(ship,status):
     while True:
@@ -46,7 +43,6 @@ def StopFarm(ship):
                 #Если дроны запущены вернуть
                 if DronesLaunchedEvent.is_set():
                     ship.ReturnDrns()
-                    print(f'{datetime.datetime.now()} return drones')
                 ship.Dock()
                 print(f'{datetime.datetime.now()} ship dock')
             time.sleep(120)
@@ -57,7 +53,7 @@ def BotLoop(ship, ShieldStatusProcess):
     if CheckLocalEvent.is_set():
         DockEvent.set()
         return
-    #Флаг андокнутого корабля
+    # Флаг андокнутого корабля
     ship.Undock()
     UndockEvent.set()
     if CheckLocalEvent.is_set():

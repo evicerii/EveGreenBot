@@ -13,13 +13,12 @@ from Classes.Cargo import *
 import time
 import os
 
-# while True:
+while True:
 #     if checkRedCross():
 #         print(f'red')
 #     else:
 #         print(f'green')
-#     time.sleep(1)
+    time.sleep(1)
 # for n in range(300, 330):
 #         if sum(pag.pixel(1359,n))==259:
 #             print(f'red')
-print(type(pag.pixel(322,791)))

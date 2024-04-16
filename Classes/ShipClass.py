@@ -79,12 +79,12 @@ class ship:
         click()
         mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
-        CheckTarget(1763,318,630)
     def DangerShield(self,status):
         time.sleep(1)
         if (700<sum(pag.pixel(935,877))) and (sum(pag.pixel(935,877))<710):
             status.clear()
         else:
+            print(f'{datetime.datetime.now()} danger shield {status}')
             status.set()
 Ishtar=ship('Ishtar',2)
-Gila=ship('Gila',3)
+Gila=ship('Gila',4)
