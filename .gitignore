@@ -2,7 +2,7 @@
 /venv
 /test.py
 /Temp.png
-/__pycache__.py
-/adds.__pycache__.py
-/adds.Value.__pycache__.py
-/Classes.__pycache__.py
+/__pycache__
+/adds.__pycache__
+/adds.Value.__pycache__
+/Classes.__pycache__
