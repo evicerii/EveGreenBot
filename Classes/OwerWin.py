@@ -16,10 +16,16 @@ class owerWin:
         for a in range(0,27):
             name = cvName(FirstAnomalyCoord)
             if name in AnomalyList:
-                mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y+(a)*20)
-                click()
-                CheckWarp(locker)
-                break
+                if a==0:
+                    mouseMove(IfFirstAnomalyWarp.x,IfFirstAnomalyWarp.y+(a)*20)
+                    click()
+                    CheckWarp(locker)
+                    break
+                else:
+                    mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y+(a)*20)
+                    click()
+                    CheckWarp(locker)
+                    break
             else:
                 FirstAnomalyCoord[1]=FirstAnomalyCoord[1]+20
             if a==26:

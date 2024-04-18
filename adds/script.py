@@ -69,11 +69,8 @@ def checkRedCross():
         if (sum(pag.pixel(1359,n))==258 or sum(pag.pixel(1359,n))==259):
             return True
 def CheckNothingFound():
-    while True:
-        time.sleep(1)
-        if (sum(pag.pixel(1586,333))==393 or sum(pag.pixel(1586,333))==396):
-            return True
-
+    if (sum(pag.pixel(1586,333))==393 or sum(pag.pixel(1586,333))==396):
+        return True
 def CheckLocal():
     for y in range(770,960):
         if sum(pag.pixel(476,y)) in range[193,223,330]:

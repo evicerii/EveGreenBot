@@ -58,3 +58,4 @@ CloseEve=boxCoordinate(CloseEve)
 
 AnomalyCoord=boxCoordinate(AnomalyCoord)
 FirstAnomalyWarp=boxCoordinate(FirstAnomalyWarp)
+IfFirstAnomalyWarp=boxCoordinate(IfFirstAnomalyWarp)

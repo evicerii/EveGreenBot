@@ -61,17 +61,14 @@ class ship:
         click()
         time.sleep(1)
     @logs
-    def ReturnDrns(self, lock):
-        lock.acquire()
+    def ReturnDrns(self):
         mouseMove(ReturnDrones.x,ReturnDrones.y)
         click()
         color=508
         time.sleep(3)
         while color==508:
             color=sum(pag.pixel(1531,991))
-            print(f'{datetime.datetime.now()} color {color} 2')
             time.sleep(1)
-        lock.release()
     @logs
     def Dock(self):
         #alt+p = probe window доделать
@@ -80,12 +77,12 @@ class ship:
         click()
         mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
-    def DangerShield(self,status):
+    def DangerShield(self,ShieldStatusEvent):
         time.sleep(1)
         if (700<sum(pag.pixel(983,875))) and (sum(pag.pixel(983,875))<730):
-            status.clear()
+            ShieldStatusEvent.clear()
         else:
             print(f'{datetime.datetime.now()} danger shield')
-            status.set()
+            ShieldStatusEvent.set()
 Ishtar=ship('Ishtar',2)
 Gila=ship('Gila',4)
