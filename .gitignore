@@ -2,6 +2,9 @@
 /venv
 /test.py
 /Temp.png
+/dist
+/build
+/windowmainprocces.spec
 /__pycache__
 /adds/__pycache__
 /adds/Value/__pycache__
