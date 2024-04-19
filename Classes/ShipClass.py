@@ -15,11 +15,11 @@ class ship:
             CheckTarget(894,863,331)
             time.sleep(1)
     @logs
-    def WarpTo(self, locker):
+    def WarpTo(self, LockCheckWarpEvent):
         mouseMove(WarpTo.x,WarpTo.y)
         click()
         print(f'{datetime.datetime.now()} start warp')
-        CheckWarp(locker)
+        CheckWarp(LockCheckWarpEvent)
         print(f'{datetime.datetime.now()} end warp')     
         time.sleep(1) 
     @logs
@@ -28,12 +28,13 @@ class ship:
         click()
         time.sleep(1) 
     @logs
-    def ActiveDefModule(self):
+    def ActiveDefModule(self, ActiveDefModuleEvent):
         fButton = [f2,f3,f4,f5]
         for a in range(0,self.modules):
             mouseMove(fButton[a].x,fButton[a].y)
             click()
         time.sleep(1)
+        ActiveDefModuleEvent.set()
     @reactionSleepTime
     @logs
     def OrbitTarget(self, target):

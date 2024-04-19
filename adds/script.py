@@ -10,7 +10,6 @@ import pyautogui as pag
 from .decorators import logs
 import adds.Value.settings as settings
 
-pytesseract.pytesseract.tesseract_cmd = r'D:/EveBot/tesseract/tesseract.exe'
 @logs
 def SelectCharWin(charNum):
     for x in range(1079):
@@ -26,9 +25,9 @@ def SelectCharWin(charNum):
             time.sleep(random.randint(500,1000)/1000)
             pag.keyUp('win')
             print(f'{datetime.datetime.now()}  use {(charNum)} win')
-def CheckWarp(locker):
+def CheckWarp(LockCheckWarpEvent):
     #запретить взаимодействие на время варпа
-    locker.set()
+    LockCheckWarpEvent.set()
     while True:
         x=963
         y=995
@@ -49,7 +48,7 @@ def CheckWarp(locker):
         else:
             time.sleep(5)
             break
-    locker.clear()
+    LockCheckWarpEvent.clear()
 def CheckTarget(x, y, z):
     while True:
         time.sleep(random.randint(3,5))
