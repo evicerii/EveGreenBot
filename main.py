@@ -8,7 +8,8 @@ from adds.Value.settings import *
 from Classes.ShipClass import *
 from Classes.OwerWin import *
 
-pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'./_internal/tesseract.exe'
 
 def CheckLocalFunc():
     while True:
