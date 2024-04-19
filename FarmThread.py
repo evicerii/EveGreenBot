@@ -8,32 +8,14 @@ from adds.Value.settings import *
 from Classes.ShipClass import *
 from Classes.OwerWin import *
 
-# pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
-pytesseract.pytesseract.tesseract_cmd = r'./_internal/tesseract.exe'
 
-def CheckLocalFunc():
-    while True:
-        #первая иконка
-        for n in range(775,953,17):
-            #Проврка тикеров в чате /red,orange,grey
-            if (pag.pixel(322,n)==(117, 10, 10) or pag.pixel(322,n)==(153, 60, 10) or pag.pixel(322,n)==(110,110,110)):
-                #Если корабль не в варпе установить флаг чата
-                if not LockCheckWarpEvent.is_set():
-                    CheckLocalEvent.set()
-                    print(f'{datetime.datetime.now()} local red')
-                    break
-            else:
-                if EndCyrcle.is_set():
-                    CheckLocalEvent.set()
-                    return
-                CheckLocalEvent.clear()
-        time.sleep(5)
+
 def ShieldStatus(ship):
     while True:
         DronesLaunchedEvent.wait()
         ship.DangerShield(ShieldStatusEvent)
         time.sleep(1)
-def BotExit() :
+def BotExit(EndCyrcle) :
     time.sleep(workTime*60+(random.randint(0,50))*6)
     EndCyrcle.set()
     StartFarmEvent.wait()
@@ -45,7 +27,7 @@ def ShipDestroy():
         if CheckTarget():
             print(f'{datetime.datetime.now()} ship destruct')
             os.system(f"taskkill /f /PID {os.getpid()}")
-def StartFarm(ship):
+def StartFarm(ship, CheckLocalEvent):
     while True:
         StartFarmEvent.wait()
         time.sleep(1)
@@ -65,7 +47,7 @@ def StartFarm(ship):
                     ship.ActiveDefModule(ActiveDefModuleEvent)
                     # Флаг андокнутого корабля
                     time.sleep(1)
-def BotLoop(ship):
+def BotLoop(ship, CheckLocalEvent):
     while True:
         UndockEvent.wait()
         ActiveDefModuleEvent.wait()
@@ -116,33 +98,19 @@ def StopFarm(ship):
         time.sleep(random.randint(3000,3600)/10)
         StartFarmEvent.set()
 
-if __name__ == '__main__':
-    CheckLocalEvent = threading.Event()
-    ShieldStatusEvent=threading.Event()
+ShieldStatusEvent=threading.Event()
 
-    UndockEvent = threading.Event()
-    DockEvent = threading.Event()
-    StartFarmEvent = threading.Event()
+UndockEvent = threading.Event()
+DockEvent = threading.Event()
+StartFarmEvent = threading.Event()
 
-    LockCheckWarpEvent=threading.Event()
-    ActiveDefModuleEvent = threading.Event()
-    DronesLaunchedEvent = threading.Event()
+LockCheckWarpEvent=threading.Event()
+ActiveDefModuleEvent = threading.Event()
+DronesLaunchedEvent = threading.Event()
 
-    EndCyrcle = threading.Event()
-    #Блокировать поток пока дроны не вернутся
-    DronesLock = threading.Lock()
+#Блокировать поток пока дроны не вернутся
+DronesLock = threading.Lock()
 
-    StartFarmEvent.set()
-    # parent_conn, child_conn = Pipe(duplex=True)
-    # BotExitProcess = Process(target=BotExit, args=(BotLoopEvent,))
+StartFarmEvent.set()
 
-    CheckLocalProcess = threading.Thread(target=CheckLocalFunc, daemon=True)
-    ShieldStatusProcess = threading.Thread(target=ShieldStatus, args=(Gila,), daemon=True)
-    StartFarmProcess = threading.Thread(target=StartFarm, args=(Gila,), daemon=True)
-    BotLoopProcess = threading.Thread(target=BotLoop, args=(Gila,), daemon=True)
-    StopFarmProcess = threading.Thread(target=StopFarm, args=(Gila,), daemon=True)
-    BotExitProcess = threading.Thread(target=BotExit)
 
-    proc = [CheckLocalProcess, ShieldStatusProcess, StartFarmProcess, BotLoopProcess, StopFarmProcess, BotExitProcess]
-    [p.start() for p in proc]
-    [p.join() for p in proc]
