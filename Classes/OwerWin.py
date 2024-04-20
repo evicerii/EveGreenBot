@@ -17,13 +17,15 @@ class owerWin:
             name = cvName(FirstAnomalyCoord)
             if name in AnomalyList:
                 if a==0:
-                    mouseMove(IfFirstAnomalyWarp.x,IfFirstAnomalyWarp.y+(a)*20)
+                    mouseMove(IfFirstAnomalyWarp.x,IfFirstAnomalyWarp.y)
                     click()
+                    # logsFunction(LogsFileName, '', name)
                     CheckWarp(locker)
                     break
                 else:
                     mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y+(a)*20)
                     click()
+                    # logsFunction(LogsFileName, '', name)
                     CheckWarp(locker)
                     break
             else:

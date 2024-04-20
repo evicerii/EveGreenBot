@@ -83,7 +83,7 @@ class ship:
         if (700<sum(pag.pixel(983,875))) and (sum(pag.pixel(983,875))<730):
             ShieldStatusEvent.clear()
         else:
-            print(f'{datetime.datetime.now()} danger shield')
+            # logsFunction(LogsFileName, '', 'ShieldStatus Danger')
             ShieldStatusEvent.set()
 Ishtar=ship('Ishtar',2)
 Gila=ship('Gila',4)
