@@ -2,13 +2,13 @@ import pyautogui as pag
 from .mouseMove.mousemove import *
 from .coordinate import *
 import time
-import datetime
 import pytesseract
 import os
 from PIL import Image
 import pyautogui as pag
 from .decorators import logs
 import adds.Value.settings as settings
+import logging
 
 @logs
 def SelectCharWin(charNum):
@@ -24,7 +24,7 @@ def SelectCharWin(charNum):
             a=str(int(a))
             time.sleep(random.randint(500,1000)/1000)
             pag.keyUp('win')
-            print(f'{datetime.datetime.now()}  use {(charNum)} win')
+            logging.info(f'use {(charNum)} win')
 def CheckWarp(LockCheckWarpEvent):
     #запретить взаимодействие на время варпа
     LockCheckWarpEvent.set()
@@ -64,7 +64,7 @@ def cvName(temp):
     os.remove('Temp.png')
     return Text
 def CheckNothingFound():
-    if (sum(pag.pixel(1586,333))==393 or sum(pag.pixel(1586,333))==396):
+    if (sum(pag.pixel(1586,333))==393 or sum(pag.pixel(1586,333))==394):
         return True
 @logs
 def RewriteSettings(txt, name):

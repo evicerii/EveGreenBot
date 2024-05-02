@@ -3,17 +3,7 @@ from numpy import *
 from functools import wraps
 import datetime
 import time
-
-# LogsFileName = time.strftime("%d.%m.%Y-%H.%M.%S")
-# open(f'./logs/{LogsFileName}.txt','w').close()
-
-def logsFunction(LogsFileName, fn='', txt=''):
-    with open(f'logs/{LogsFileName}.txt','a') as f:
-            if fn != '':
-                f.write(f'{datetime.datetime.now()} function {fn.__name__}\n')
-            else:
-                f.write(f'{datetime.datetime.now()} action {txt}\n')
-
+import logging
 def reactionSleepTime(fn):
     def wrapper(*args, **kwargs):
         fn(*args, **kwargs)
@@ -23,6 +13,6 @@ def reactionSleepTime(fn):
 def logs(fn):
     def wrapper(*args, **kwargs):
         fn(*args, **kwargs)
-        print(f'{datetime.datetime.now()}  {fn.__name__}')
+        logging.info(f'{fn.__name__}')
         # logsFunction(LogsFileName, fn)
     return wrapper

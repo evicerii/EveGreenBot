@@ -18,9 +18,9 @@ class ship:
     def WarpTo(self, LockCheckWarpEvent):
         mouseMove(WarpTo.x,WarpTo.y)
         click()
-        print(f'{datetime.datetime.now()} start warp')
+        logging.info(f'start warp')
         CheckWarp(LockCheckWarpEvent)
-        print(f'{datetime.datetime.now()} end warp')     
+        logging.info(f'end warp')     
         time.sleep(1) 
     @logs
     def ActivePropModule(self):

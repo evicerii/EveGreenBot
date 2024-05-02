@@ -10,35 +10,38 @@ class owerWin:
         owerWindow = [OwerWindow1, OwerWindow2, OwerWindow3, OwerWindow4, OwerWindow5, OwerWindow6]
         mouseMove(owerWindow[self.number].x,owerWindow[self.number].y)
         click()
-    @logs
-    def SelectAnomaly(self, locker, DockEvent):
-        Temp=FirstAnomalyCoord[1]
-        for a in range(0,27):
-            name = cvName(FirstAnomalyCoord)
-            if name in AnomalyList:
-                if a==0:
-                    mouseMove(IfFirstAnomalyWarp.x,IfFirstAnomalyWarp.y)
-                    click()
-                    # logsFunction(LogsFileName, '', name)
-                    CheckWarp(locker)
-                    break
-                else:
-                    mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y+(a)*20)
-                    click()
-                    # logsFunction(LogsFileName, '', name)
-                    CheckWarp(locker)
-                    break
-            else:
-                FirstAnomalyCoord[1]=FirstAnomalyCoord[1]+20
-            if a==26:
-                DockEvent.set()
-        FirstAnomalyCoord[1]=Temp
     def checkElement(self):
         ...
-
+class AnomalyWin:
+    def __init__(self, name):
+        self.name = name
+    def HideAnomaly(self):
+        mouseMove(AnomalyCoord.x,AnomalyCoord.y)
+        rightClick()
+        IgnoreResult = boxRelCoordinate(IgnoreResultValue)
+        mouseMove(IgnoreResult.x,IgnoreResult.y)
+        click()
+    @logs
+    def SelectAnomaly(self, locker, DockEvent):
+        while True:
+            name = cvName(FirstAnomalyCoord)
+            if name in AnomalyList:
+                mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y)
+                click()
+                # logsFunction(LogsFileName, '', name)
+                CheckWarp(locker)
+                break
+            elif name=='':
+                DockEvent.set()
+            else:
+                self.HideAnomaly()
+            time.sleep(1)
+     
 Nav=owerWin('nav',1)
 Farm=owerWin('farm',2)
 Loot=owerWin('loot',3)
 Structure=owerWin('structure',4)
 Test=owerWin('test',5)
+
+GreenAnomaly=AnomalyWin('green')
 AnomalyWin=owerWin('anomaly',6)

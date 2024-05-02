@@ -19,7 +19,7 @@ def CheckLocalFunc():
                 #Если корабль не в варпе установить флаг чата
                 if not LockCheckWarpEvent.is_set():
                     CheckLocalEvent.set()
-                    print(f'{datetime.datetime.now()} local red')
+                    logging.info(f'local red')
                     break
             else:
                 if EndCyrcle.is_set():
@@ -35,13 +35,13 @@ def BotExit() :
     time.sleep(workTime*60+(random.randint(0,50))*6)
     EndCyrcle.set()
     StartFarmEvent.wait()
-    print(f'{datetime.datetime.now()} shut down')
+    logging.info(f'shut down')
     os.system(f"taskkill /f /PID {os.getpid()}")
 def ShipDestroy():
     while True:
         ShieldStatusEvent.wait()
         if (CheckTarget(1724,321,262) or CheckTarget(1724,321,265)):
-            print(f'{datetime.datetime.now()} ship destruct')
+            logging.info(f'ship destruct')
             os.system(f"taskkill /f /PID {os.getpid()}")
 def StartFarm(ship):
     while True:
@@ -84,7 +84,7 @@ def BotLoop(ship):
         Farm.takeActive()
         while True:
             if CheckNothingFound():
-                print(f'{datetime.datetime.now()} red cross not detected')
+                logging.info(f'red cross not detected')
                 time.sleep(1)
                 ship.ReturnDrns()
                 break
@@ -96,7 +96,7 @@ def BotLoop(ship):
         if DockEvent.is_set():
             time.sleep(1)
             continue   
-        print(f'{datetime.datetime.now()} BotLoop end cyrcle')
+        logging.info(f'BotLoop end cyrcle')
         time.sleep(random.randint(600,650)/10)
 def StopFarm(ship):
     while True:
