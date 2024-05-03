@@ -2,6 +2,7 @@ from adds.coordinate import *
 from adds.script import *
 from adds.decorators import *
 
+
 class owerWin:
     def __init__(self, name, number):
         self.name = name
@@ -21,14 +22,18 @@ class AnomalyWin:
         IgnoreResult = boxRelCoordinate(IgnoreResultValue)
         mouseMove(IgnoreResult.x,IgnoreResult.y)
         click()
+    def WarpAnomalyAction(self):
+        mouseMove(AnomalyCoord.x,AnomalyCoord.y)
+        rightClick()
+        WarpAnomaly = boxRelCoordinate(WarpAnomalyString)
+        mouseMove(WarpAnomaly.x,WarpAnomaly.y)
+        click()
     @logs
     def SelectAnomaly(self, locker, DockEvent):
         while True:
             name = cvName(FirstAnomalyCoord)
             if name in AnomalyList:
-                mouseMove(FirstAnomalyWarp.x,FirstAnomalyWarp.y)
-                click()
-                # logsFunction(LogsFileName, '', name)
+                self.WarpAnomalyAction()
                 CheckWarp(locker)
                 break
             elif name=='':
@@ -44,4 +49,3 @@ Structure=owerWin('structure',4)
 Test=owerWin('test',5)
 
 GreenAnomaly=AnomalyWin('green')
-AnomalyWin=owerWin('anomaly',6)

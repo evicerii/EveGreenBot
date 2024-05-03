@@ -3,10 +3,11 @@ import threading
 from adds.coordinate import *
 from adds.script import *
 from adds.decorators import *
-from adds.Value.settings import *
 
 from Classes.ShipClass import *
 from Classes.OwerWin import *
+
+config.read('config.ini')
 
 pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
 
@@ -30,9 +31,10 @@ def ShieldStatus(ship):
     while True:
         DronesLaunchedEvent.wait()
         ship.DangerShield(ShieldStatusEvent)
+        logging.info(f'low shield')
         time.sleep(1)
 def BotExit() :
-    time.sleep(workTime*60+(random.randint(0,50))*6)
+    time.sleep(int(config.get('General','workTime'))*60+(random.randint(0,50))*6)
     EndCyrcle.set()
     StartFarmEvent.wait()
     logging.info(f'shut down')
@@ -68,7 +70,7 @@ def BotLoop(ship):
         UndockEvent.wait()
         ActiveDefModuleEvent.wait()
         time.sleep(5)
-        AnomalyWin.SelectAnomaly(LockCheckWarpEvent, DockEvent)
+        GreenAnomaly.SelectAnomaly(LockCheckWarpEvent, DockEvent)
         if DockEvent.is_set():
             time.sleep(1)
             continue

@@ -7,8 +7,11 @@ import os
 from PIL import Image
 import pyautogui as pag
 from .decorators import logs
-import adds.Value.settings as settings
 import logging
+import win32con
+import configparser
+
+config = configparser.ConfigParser()
 
 @logs
 def SelectCharWin(charNum):
@@ -64,14 +67,19 @@ def cvName(temp):
     os.remove('Temp.png')
     return Text
 def CheckNothingFound():
-    if (sum(pag.pixel(1586,333))==393 or sum(pag.pixel(1586,333))==394):
+    if (sum(pag.pixel(1586,333))>390 and sum(pag.pixel(1586,333))<400):
         return True
 @logs
-def RewriteSettings(txt, name):
-    res = format(txt.get()) 
-    with open ('./adds/Value/settings.py', 'r') as f:
-        old_data = f.read()
-    new_data = old_data.replace(f'{name}={settings.values[name]}', f'{name}={res}')
-    with open ('./adds/Value/settings.py', 'w') as f:
-        f.write(new_data)
-    settings.values[name] = res
+def RewriteSettings(name, txt):
+    config.read('config.ini')
+    config.set("General", name, txt)
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+
+def ActivateWindow(hwnd):
+    try:
+        logging.info('Active Window')
+        win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
+        win32gui.SetForegroundWindow(hwnd)
+    except IndexError:
+        logging.error('Окно с указанным идентификатором не найдено.')
