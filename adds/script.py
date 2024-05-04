@@ -9,7 +9,6 @@ import pyautogui as pag
 from .decorators import logs
 import logging
 import win32con
-import configparser
 
 config = configparser.ConfigParser()
 
@@ -75,7 +74,6 @@ def RewriteSettings(name, txt):
     config.set("General", name, txt)
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
-
 def ActivateWindow(hwnd):
     try:
         logging.info('Active Window')

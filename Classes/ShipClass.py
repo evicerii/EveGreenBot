@@ -78,9 +78,9 @@ class ship:
         click()
         mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
-    def DangerShield(self,ShieldStatusEvent):
+    def DangerShield(self,ShieldStatusEvent, x=983, y=875):
         time.sleep(1)
-        if (700<sum(pag.pixel(983,875))) and (sum(pag.pixel(983,875))<730):
+        if (700<sum(pag.pixel(x,y))) and (sum(pag.pixel(x, y))<750):
             ShieldStatusEvent.clear()
         else:
             # logsFunction(LogsFileName, '', 'ShieldStatus Danger')

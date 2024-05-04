@@ -3,12 +3,18 @@ import threading
 from adds.coordinate import *
 from adds.script import *
 from adds.decorators import *
+from adds.ScreenSubWin import *
 
 from Classes.ShipClass import *
 from Classes.OwerWin import *
 
+from datetime import date
+
+#pyinstaller --add-data "tesseract:tesseract" --add-data "config.ini:."  -add-data "logs:logs" farmthread.py
+
 config.read('config.ini')
 
+logging.basicConfig(level=logging.INFO, filename=f'logs/{date.today()}.log', filemode='w')
 pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
 
 def CheckLocalFunc():
