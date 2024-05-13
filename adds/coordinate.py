@@ -43,6 +43,7 @@ OwerWindow4=boxCoordinate(OwerWindow4)
 OwerWindow5=boxCoordinate(OwerWindow5)
 OwerWindow6=boxCoordinate(OwerWindow6)
 
+LocalChat=boxCoordinate(LocalChatValue)
 
 Dock=boxCoordinate(Dock)
 DockMark=boxCoordinate(DockMark)
@@ -61,3 +62,5 @@ CloseEve=boxCoordinate(CloseEve)
 AnomalyCoord=boxCoordinate(AnomalyCoord)
 FirstAnomalyWarp=boxCoordinate(FirstAnomalyWarp)
 IfFirstAnomalyWarp=boxCoordinate(IfFirstAnomalyWarp)
+
+LaunchWindow=boxCoordinate(LaunchwindowValue)

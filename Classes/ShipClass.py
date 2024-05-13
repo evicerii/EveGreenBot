@@ -5,9 +5,10 @@ from adds.decorators import *
 from Classes.OwerWin import *
 
 class ship:
-    def __init__(self, name, modules):
+    def __init__(self, name, PropModule, modules):
         self.name = name
-        self.modules = modules
+        self.PropModule = PropModule
+        self.modules = int(modules)
     @logs
     def Undock(self):
             mouseMove(UndockCoordinate.x,UndockCoordinate.y)
@@ -24,8 +25,9 @@ class ship:
         time.sleep(1) 
     @logs
     def ActivePropModule(self):
-        mouseMove(f1.x,f1.y)
-        click()
+        if self.PropModule == True:
+            mouseMove(f1.x,f1.y)
+            click()
         time.sleep(1) 
     @logs
     def ActiveDefModule(self, ActiveDefModuleEvent):
@@ -85,5 +87,4 @@ class ship:
         else:
             # logsFunction(LogsFileName, '', 'ShieldStatus Danger')
             ShieldStatusEvent.set()
-Ishtar=ship('Ishtar',2)
-Gila=ship('Gila',4)
+

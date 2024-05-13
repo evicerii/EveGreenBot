@@ -1,7 +1,5 @@
 from tkinter import *
-from FarmThread import *
-
-config.read('config.ini')
+from .FarmThread import *
 
 window = Tk()  
 window.title("Общие настройки")  

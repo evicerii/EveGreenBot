@@ -3,7 +3,7 @@ import threading
 from adds.coordinate import *
 from adds.script import *
 from adds.decorators import *
-from adds.ScreenSubWin import *
+from adds.WinAction import *
 
 from Classes.ShipClass import *
 from Classes.OwerWin import *
@@ -14,6 +14,7 @@ from datetime import date
 
 config.read('config.ini')
 
+Ship = ship(config.get('UseShip','ShipName'), config.get('UseShip','PropModule'), config.get('UseShip','DefModule'))
 logging.basicConfig(level=logging.INFO, filename=f'logs/{date.today()}.log', filemode='w')
 pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
 
@@ -120,7 +121,7 @@ def StopFarm(ship):
                 ActiveDefModuleEvent.clear()
             ship.Dock()
         time.sleep(random.randint(3000,3600)/10)
-        StartFarmEvent.set()
+        StartFarmEvent.set()     
 
 ShieldStatusEvent=threading.Event()
 
@@ -139,15 +140,15 @@ DronesLock = threading.Lock()
 
 StartFarmEvent.set()
 
-if __name__ == '__main__':
-    CheckLocalProcess = threading.Thread(target=CheckLocalFunc, daemon=True)
-    ShieldStatusThread = threading.Thread(target=ShieldStatus, args=(Gila,), daemon=True)
-    StartFarmThread = threading.Thread(target=StartFarm, args=(Gila,), daemon=True)
-    BotLoopThread = threading.Thread(target=BotLoop, args=(Gila,), daemon=True)
-    StopFarmThread = threading.Thread(target=StopFarm, args=(Gila,), daemon=True)
-    BotExitThread = threading.Thread(target=BotExit)
+CheckLocalThread = threading.Thread(target=CheckLocalFunc, daemon=True)
+#check-check
+ShieldStatusThread = threading.Thread(target=ShieldStatus, args=(Ship,), daemon=True)
+StartFarmThread = threading.Thread(target=StartFarm, args=(Ship,), daemon=True)
+BotLoopThread = threading.Thread(target=BotLoop, args=(Ship,), daemon=True)
+StopFarmThread = threading.Thread(target=StopFarm, args=(Ship,), daemon=True)
+BotExitThread = threading.Thread(target=BotExit)
 
-    threads = [CheckLocalProcess, ShieldStatusThread, StartFarmThread, BotLoopThread, StopFarmThread, BotExitThread]
-
+threads = [CheckLocalThread, ShieldStatusThread, StartFarmThread, BotLoopThread, StopFarmThread, BotExitThread]
+def runThread(WinKeys):
     [p.start() for p in threads]
     [p.join() for p in threads]

@@ -1,4 +1,4 @@
-
+#general
 UndockStation=[1650, 1870, 305, 330]
 Undock=[1650, 1870, 310, 340]
 ShipCargo=[0, 43, 370, 397]
@@ -45,3 +45,7 @@ OwerWindow6= [1509, 1513, 252, 261]
 CheckLocal=[67,711,41,23]
 LaunchWin=[-1404,-1325,366,382]
 CloseEve=[1885,1915,2,18]
+LocalChatValue=[75,126,717,730]
+
+#launcher
+LaunchwindowValue = [828, 1101, 412, 446]
