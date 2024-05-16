@@ -13,6 +13,8 @@ import psutil
 pidsArray=[]
 windows = {}
 
+WindowsClassArray = []
+
 ProcessName = 'exefile.exe'
 
 DungerShield = threading.Event()

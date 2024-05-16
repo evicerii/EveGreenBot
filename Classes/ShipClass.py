@@ -4,7 +4,9 @@ from adds.decorators import *
 
 from Classes.OwerWin import *
 
-class ship:
+config.read('config.ini')
+
+class shipClass:
     def __init__(self, name, PropModule, modules):
         self.name = name
         self.PropModule = PropModule
@@ -85,6 +87,8 @@ class ship:
         if (700<sum(pag.pixel(x,y))) and (sum(pag.pixel(x, y))<750):
             ShieldStatusEvent.clear()
         else:
-            # logsFunction(LogsFileName, '', 'ShieldStatus Danger')
+            logging.info(f'low shield')
             ShieldStatusEvent.set()
+
+Ship = shipClass(config.get('UseShip','ShipName'), config.get('UseShip','PropModule'), config.get('UseShip','DefModule'))
 

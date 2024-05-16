@@ -5,7 +5,6 @@ import time
 import pytesseract
 import os
 from PIL import Image
-import pyautogui as pag
 from .decorators import logs
 import logging
 import win32con
@@ -30,6 +29,7 @@ def SelectCharWin(charNum):
 def CheckWarp(LockCheckWarpEvent):
     #запретить взаимодействие на время варпа
     LockCheckWarpEvent.set()
+    time.sleep(5)
     while True:
         x=963
         y=995

@@ -14,7 +14,6 @@ from datetime import date
 
 config.read('config.ini')
 
-Ship = ship(config.get('UseShip','ShipName'), config.get('UseShip','PropModule'), config.get('UseShip','DefModule'))
 logging.basicConfig(level=logging.INFO, filename=f'logs/{date.today()}.log', filemode='w')
 pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
 
@@ -32,29 +31,48 @@ def CheckLocalFunc():
             else:
                 if EndCyrcle.is_set():
                     CheckLocalEvent.set()
+                    DockAllWindows(AllDockLock)
+                    logging.info(f'CheckLocalFunc stop')
                     return
                 CheckLocalEvent.clear()
+def DockAllWindows(AllDockLock):
+    AllDockLock.acquire()
+    for win in windows.keys():
+        WindowsClassArray[win-1].TakeWinActive()
+        time.sleep(3)
+        DockEvent.set()
+        time.sleep(1)
+    AllDockLock.release()
+    return
 def ShieldStatus(ship):
     while True:
+        if EndCyrcle.is_set():
+            logging.info(f'ShieldStatus stop')
+            return
+        UndockEvent.wait()
         DronesLaunchedEvent.wait()
         ship.DangerShield(ShieldStatusEvent)
-        logging.info(f'low shield')
         time.sleep(1)
 def BotExit() :
     time.sleep(int(config.get('General','workTime'))*60+(random.randint(0,50))*6)
     EndCyrcle.set()
-    StartFarmEvent.wait()
-    logging.info(f'shut down')
-    os.system(f"taskkill /f /PID {os.getpid()}")
+    logging.info(f'BotExit stop')
+    return
 def ShipDestroy():
     while True:
         ShieldStatusEvent.wait()
         if (CheckTarget(1724,321,262) or CheckTarget(1724,321,265)):
-            logging.info(f'ship destruct')
-            os.system(f"taskkill /f /PID {os.getpid()}")
-def StartFarm(ship):
+            EndCyrcle.set()
+            logging.info(f'ShipDestroy stop')
+            return
+def StartFarm(ship, ActiveThread):
     while True:
         StartFarmEvent.wait()
+        if EndCyrcle.is_set():
+            logging.info(f'StartFarm stop')
+            UndockEvent.set()
+            ActiveDefModuleEvent.set()
+            return
         time.sleep(1)
         StartFarmEvent.clear()
         if not UndockEvent.is_set():
@@ -63,19 +81,26 @@ def StartFarm(ship):
                 time.sleep(random.randint(3000,3600)/10)
                 StartFarmEvent.set()
             else:
+                WindowsClassArray[ActiveThread].TakeWinActive()
                 ship.Undock()
                 UndockEvent.set()
                 if CheckLocalEvent.is_set():
                     DockEvent.set()
                     time.sleep(1)
                 else:
+                    WindowsClassArray[ActiveThread].TakeWinActive()
                     ship.ActiveDefModule(ActiveDefModuleEvent)
                     # Флаг андокнутого корабля
                     time.sleep(1)
-def BotLoop(ship):
+def BotLoop(ship, ActiveThread):
     while True:
         UndockEvent.wait()
         ActiveDefModuleEvent.wait()
+        if EndCyrcle.is_set():
+            logging.info(f'BotLoop stop')
+            DockEvent.set()
+            return
+        WindowsClassArray[ActiveThread].TakeWinActive()
         time.sleep(5)
         GreenAnomaly.SelectAnomaly(LockCheckWarpEvent, DockEvent)
         if DockEvent.is_set():
@@ -86,15 +111,17 @@ def BotLoop(ship):
             time.sleep(1)
             continue
         #Флаг запущенных дронов
+        WindowsClassArray[ActiveThread].TakeWinActive()
         ship.LaunchDrns()
         DronesLaunchedEvent.set()
         Structure.takeActive()
         ship.OrbitTarget(FirstTarget)
+        ################################
         Farm.takeActive()
         while True:
             if CheckNothingFound():
                 logging.info(f'red cross not detected')
-                time.sleep(1)
+                WindowsClassArray[ActiveThread].TakeWinActive()
                 ship.ReturnDrns()
                 break
             time.sleep(5)
@@ -107,18 +134,23 @@ def BotLoop(ship):
             continue   
         logging.info(f'BotLoop end cyrcle')
         time.sleep(random.randint(600,650)/10)
-def StopFarm(ship):
+def StopFarm(ship, ActiveThread):
     while True:
         DockEvent.wait()
         DockEvent.clear()
+        if EndCyrcle.is_set():
+            logging.info(f'StopFarm stop')
+            return
         #Если корабль андокнулся
         if UndockEvent.is_set():
             UndockEvent.clear()
             #Если дроны запущены вернуть
             if DronesLaunchedEvent.is_set():
+                WindowsClassArray[ActiveThread].TakeWinActive()
                 ship.ReturnDrns()
                 DronesLaunchedEvent.clear()
                 ActiveDefModuleEvent.clear()
+            WindowsClassArray[ActiveThread].TakeWinActive()
             ship.Dock()
         time.sleep(random.randint(3000,3600)/10)
         StartFarmEvent.set()     
@@ -137,18 +169,28 @@ CheckLocalEvent = threading.Event()
 EndCyrcle = threading.Event()
 #Блокировать поток пока дроны не вернутся
 DronesLock = threading.Lock()
+AllDockLock = threading.Lock()
 
+GetPIDList(ProcessName)
+for NumberWin, pid in enumerate(pidsArray, 1):
+    GetHWID(NumberWin, pid)
+#во всех окнах
+for win in windows.keys():
+    WindowsClassArray.append(Character(win, pidsArray[win-1], windows[win]))
+    
 StartFarmEvent.set()
 
-CheckLocalThread = threading.Thread(target=CheckLocalFunc, daemon=True)
-#check-check
-ShieldStatusThread = threading.Thread(target=ShieldStatus, args=(Ship,), daemon=True)
-StartFarmThread = threading.Thread(target=StartFarm, args=(Ship,), daemon=True)
-BotLoopThread = threading.Thread(target=BotLoop, args=(Ship,), daemon=True)
-StopFarmThread = threading.Thread(target=StopFarm, args=(Ship,), daemon=True)
-BotExitThread = threading.Thread(target=BotExit)
-
-threads = [CheckLocalThread, ShieldStatusThread, StartFarmThread, BotLoopThread, StopFarmThread, BotExitThread]
 def runThread(WinKeys):
+    ActiveThread = WinKeys-1
+    print(ActiveThread)
+    CheckLocalThread = threading.Thread(target=CheckLocalFunc, daemon=True)
+    ################################################################
+    ShieldStatusThread = threading.Thread(target=ShieldStatus, args=(Ship,), daemon=True)
+    StartFarmThread = threading.Thread(target=StartFarm, args=(Ship, ActiveThread,), daemon=True)
+    BotLoopThread = threading.Thread(target=BotLoop, args=(Ship, ActiveThread,), daemon=True)
+    StopFarmThread = threading.Thread(target=StopFarm, args=(Ship, ActiveThread,), daemon=True)
+    BotExitThread = threading.Thread(target=BotExit)
+
+    threads = [CheckLocalThread, ShieldStatusThread, StartFarmThread, BotLoopThread, StopFarmThread, BotExitThread]
+    
     [p.start() for p in threads]
-    [p.join() for p in threads]
