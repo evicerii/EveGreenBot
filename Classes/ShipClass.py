@@ -72,6 +72,7 @@ class shipClass:
         color=508
         time.sleep(3)
         while color==508:
+            time.sleep(1)
             color=sum(pag.pixel(1531,991))
             time.sleep(1)
     @logs
