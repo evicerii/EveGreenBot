@@ -32,13 +32,12 @@ class shipClass:
             click()
         time.sleep(1) 
     @logs
-    def ActiveDefModule(self, ActiveDefModuleEvent):
+    def ActiveDefModule(self):
         fButton = [f2,f3,f4,f5]
         for a in range(0,self.modules):
             mouseMove(fButton[a].x,fButton[a].y)
             click()
         time.sleep(1)
-        ActiveDefModuleEvent.set()
     @reactionSleepTime
     @logs
     def OrbitTarget(self, target):
@@ -64,7 +63,10 @@ class shipClass:
     def LaunchDrns(self):
         mouseMove(LaunchDrones.x,LaunchDrones.y)
         click()
-        time.sleep(1)
+        time.sleep(3)
+        color=sum(pag.pixel(1531,991))
+        if color!=433:
+            self.LaunchDrns()
     @logs
     def ReturnDrns(self):
         mouseMove(ReturnDrones.x,ReturnDrones.y)
@@ -83,13 +85,13 @@ class shipClass:
         click()
         mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
-    def DangerShield(self,ShieldStatusEvent, x=983, y=875):
+    def DangerShield(self, x=983, y=875):
         time.sleep(1)
         if (700<sum(pag.pixel(x,y))) and (sum(pag.pixel(x, y))<750):
-            ShieldStatusEvent.clear()
+            ShieldStatusVar = False
         else:
             logging.info(f'low shield')
-            ShieldStatusEvent.set()
+            ShieldStatusVar = True
 
 Ship = shipClass(config.get('UseShip','ShipName'), config.get('UseShip','PropModule'), config.get('UseShip','DefModule'))
 

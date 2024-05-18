@@ -28,7 +28,7 @@ def SelectCharWin(charNum):
             logging.info(f'use {(charNum)} win')
 def CheckWarp(LockCheckWarpEvent):
     #запретить взаимодействие на время варпа
-    LockCheckWarpEvent.set()
+    LockCheckWarpEvent.acquire()
     time.sleep(5)
     while True:
         x=963
@@ -50,7 +50,7 @@ def CheckWarp(LockCheckWarpEvent):
         else:
             time.sleep(5)
             break
-    LockCheckWarpEvent.clear()
+    LockCheckWarpEvent.release()
 def CheckTarget(x, y, z):
     while True:
         time.sleep(random.randint(3,5))

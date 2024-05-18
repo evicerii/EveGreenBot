@@ -29,7 +29,7 @@ class AnomalyWin:
         mouseMove(WarpAnomaly.x,WarpAnomaly.y)
         click()
     @logs
-    def SelectAnomaly(self, locker, DockEvent):
+    def SelectAnomaly(self, locker):
         while True:
             name = cvName(FirstAnomalyCoord)
             if name in AnomalyList:
@@ -37,7 +37,7 @@ class AnomalyWin:
                 CheckWarp(locker)
                 break
             elif name=='':
-                DockEvent.set()
+                return False
             else:
                 self.HideAnomaly()
             time.sleep(1)
