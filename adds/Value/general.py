@@ -1,6 +1,7 @@
 #general
 UndockStation=[1650, 1870, 305, 330]
 Undock=[1650, 1870, 310, 340]
+StopShip=[910,916,971,976]
 ShipCargo=[0, 43, 370, 397]
 CargoOrePosition=[260, 317, 388, 437]
 HangarCargo=[107,226,521,533]
@@ -46,6 +47,7 @@ CheckLocal=[67,711,41,23]
 LaunchWin=[-1404,-1325,366,382]
 CloseEve=[1885,1915,2,18]
 LocalChatValue=[75,126,717,730]
-
+WreckLootAll = [612, 664, 725, 740]
+ShipCargo = [10, 36, 369, 397]
 #launcher
 LaunchwindowValue = [828, 1101, 412, 446]

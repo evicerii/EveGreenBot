@@ -2,6 +2,7 @@ from adds.coordinate import *
 from adds.script import *
 from adds.decorators import *
 
+from Classes.WinAction import WindowsClassArray
 from Classes.OwerWin import *
 
 config.read('config.ini')
@@ -11,6 +12,8 @@ class shipClass:
         self.name = name
         self.PropModule = PropModule
         self.modules = int(modules)
+        self.droneBuy = True
+        self.SpecialCargo = True
     @logs
     def Undock(self):
             mouseMove(UndockCoordinate.x,UndockCoordinate.y)
@@ -27,7 +30,7 @@ class shipClass:
         time.sleep(1) 
     @logs
     def ActivePropModule(self):
-        if self.PropModule == True:
+        if self.PropModule == 'True':
             mouseMove(f1.x,f1.y)
             click()
         time.sleep(1) 
@@ -64,22 +67,23 @@ class shipClass:
         mouseMove(LaunchDrones.x,LaunchDrones.y)
         click()
         time.sleep(3)
-        color=sum(pag.pixel(1531,991))
-        if color!=433:
+        color=sum(pag.pixel(1361,976))
+        if color!=101:
             self.LaunchDrns()
     @logs
-    def ReturnDrns(self):
+    def ReturnDrns(self, hwnd):
         mouseMove(ReturnDrones.x,ReturnDrones.y)
         click()
-        color=508
-        time.sleep(3)
-        while color==508:
+        color=605
+        time.sleep(5)
+        while color==605:
+            WindowsClassArray[0].IMGInvisible()
+            pix = Image.open('temp.jpeg').load()
+            color=sum(pix[1794, 968])
             time.sleep(1)
-            color=sum(pag.pixel(1531,991))
-            time.sleep(1)
+        ActivateWindow(hwnd)
     @logs
     def Dock(self):
-        #alt+p = probe window доделать
         Nav.takeActive()
         mouseMove(FirstTarget.x,FirstTarget.y)
         click()
@@ -92,6 +96,27 @@ class shipClass:
         else:
             logging.info(f'low shield')
             ShieldStatusVar = True
-
+    def OpenCargo(self):
+        mouseMove(ShipCargo.x,ShipCargo.y)
+        click()
+        time.sleep(1)
+    def SelectChipCargo(self):
+        mouseMove()
+        click()
+    @logs
+    def LootAll(self):
+        mouseMove(WreckLootAll.x,WreckLootAll.y)
+        click()
+        time.sleep(1)
+    @logs
+    def UploadCargo(self):
+        mouseMove(SelectAllField.x,SelectAllField.y)
+        rightClick()
+        SelectAll=boxRelCoordinate(RightFirstRow)
+        mouseMove(SelectAll.x,SelectAll.y)
+        click()
+        mouseMove(FirstItem.x,FirstItem.y)
+        dragNdrop(Hangars.x,Hangars.y)  
+        
 Ship = shipClass(config.get('UseShip','ShipName'), config.get('UseShip','PropModule'), config.get('UseShip','DefModule'))
 

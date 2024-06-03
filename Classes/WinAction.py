@@ -4,40 +4,22 @@ import threading
 
 from PIL import Image
 import win32gui
-import win32con
-import os
-import time
-import win32process
-import psutil
+import logging
+import pyautogui as pag
 
-pidsArray=[]
-windows = {}
+from adds.script import *
 
 WindowsClassArray = []
+ScreenClassArray = []
 
 ProcessName = 'exefile.exe'
 
-DungerShield = threading.Event()
-
-def GetPIDList(ProcessName):
-    for proc in psutil.process_iter():
-        if ProcessName in proc.name():
-            pid=proc.pid
-            pidsArray.append(pid)
-def GetHWID(NumberWin, pid):
-    def enum_window_callback(hwnd, pid):
-        tid, current_pid = win32process.GetWindowThreadProcessId(hwnd)
-        if pid == current_pid and win32gui.IsWindowVisible(hwnd):
-            windows[NumberWin] = hwnd
-
-    win32gui.EnumWindows(enum_window_callback, pid)
-
 class Character:
-    def __init__(self, name, pid, hwid):
-        self.name = name
+    def __init__(self, number, pid, hwnd):
+        self.number = number
         self.ProcessName = ProcessName
         self.pid = pid
-        self.hwnd = hwid
+        self.hwnd = hwnd
     def IMGInvisible(self):
         f = ctypes.windll.dwmapi.DwmGetWindowAttribute
         rect = ctypes.wintypes.RECT()
@@ -71,28 +53,37 @@ class Character:
 
         im_scr.save(f'temp.jpeg', 'jpeg')
         return  f'temp.jpeg'
-    def TakeWinActive(self):
-        win32gui.ShowWindow(self.hwnd, win32con.SW_SHOWMAXIMIZED)
-        win32gui.SetForegroundWindow(self.hwnd)
-    def WinCheckShield(self, DungerShield):
-        im = Image.open('temp.jpeg')
-        pix = im.load()
-        if sum(pix[966,850])>700 and sum(pix[966,850])<750:
-            #event set
-            print('Dunger')
-            DungerShield.set()
-    def CheckNeedActivateWindow(self, hwndNEW):
-        if self.hwnd!=hwndNEW:
-            self.TakeWinActive(hwndNEW)
 
-def CheckShieldStatus(EVEChar):
-    GetPIDList(ProcessName)
-    for NumberWin, pid in enumerate(pidsArray, 1):
-        GetHWID(NumberWin, pid)
-    for i in windows.keys():
-        EVEChar.IMGInvisible(windows[i])
-        EVEChar.WinCheckShield(DungerShield)
-        os.remove('Temp.jpeg')
-        if DungerShield.is_set:
-            EVEChar.TakeWinActive(windows[i])
-            time.sleep(6)
+class ScreenAction():
+    def __init__(self):
+        ...
+        
+    def TakeLocalStatus(self, LokalStatus):
+        pix = Image.open('temp.jpeg').load()
+        for n in range(754,952,17):
+            #Проврка тикеров в чате /red,orange,grey
+            if (pix[321,n]==(79, 5, 6) or pix[321,n]==(146, 69, 27) or pix[321,n]==(103, 103, 103)):
+                logging.info(f'local red')
+                LokalStatus.set()
+    def TakeShieldStatus(self, ShieldStatus):
+        pix = Image.open('temp.jpeg').load()
+        if (sum(pix[965,850])>700 and sum(pix[965,850])<750) or (sum(pix[966,850])>700 and sum(pix[966,850])<750) or (sum(pix[967,850])>700 and sum(pix[967,850])<750):
+            ShieldStatus.set()
+        else:
+            logging.info(f'low shield')
+            ShieldStatus.clear()
+    def TakeOverWinStatus(self, OverWinStatus):
+        pix = Image.open('temp.jpeg').load()
+        if (sum(pix[1576,306])) == 402:
+            OverWinStatus.set()
+    def TakeStatus(self):
+        print(self.LokalStatus)
+        print(self.ShieldStatus)
+        print(self.OverWinStatus)
+
+GetPIDList(ProcessName)
+for NumberWin, pid in enumerate(pidsArray, 1):
+    GetHWID(NumberWin, pid)
+for win in windows.keys():
+    WindowsClassArray.append(Character(win, pidsArray[win-1], windows[win]))
+    ScreenClassArray.append(ScreenAction())

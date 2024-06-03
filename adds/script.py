@@ -8,49 +8,33 @@ from PIL import Image
 from .decorators import logs
 import logging
 import win32con
+import time
+import win32process
+import psutil
 
 config = configparser.ConfigParser()
 
-@logs
-def SelectCharWin(charNum):
-    for x in range(1079):
-        if sum(pag.pixel(x,1053)) == 105:
-            a=(x-402)/49+1
-            pag.keyDown('win')
-            b=1
-            while b<=charNum:
-                time.sleep(random.randint(150,250)/1000)
-                b=b+1
-                pag.press(str(int(a)))
-            a=str(int(a))
-            time.sleep(random.randint(500,1000)/1000)
-            pag.keyUp('win')
-            logging.info(f'use {(charNum)} win')
-def CheckWarp(LockCheckWarpEvent):
-    #запретить взаимодействие на время варпа
-    LockCheckWarpEvent.acquire()
-    time.sleep(5)
+pidsArray=[]
+windows = {}
+
+def CheckWarp(hwnd):
+    time.sleep(10)
     while True:
-        x=963
-        y=995
-        rgb1 = pag.pixel(x,y)
-        rgb1 = sum(rgb1)
+        ActivateWindow(hwnd)
+        rgb1 = sum(pag.pixel(963, 995))
         if 700<rgb1<710:
             time.sleep(1)
             break
         else:
             time.sleep(5)
     while True:
-        x=963
-        y=995
-        rgb1 = pag.pixel(x,y)
-        rgb1 = sum(rgb1)
+        ActivateWindow(hwnd)
+        rgb1 = sum(pag.pixel(963, 995))
         if 700<rgb1<710:
             time.sleep(1)
         else:
             time.sleep(5)
             break
-    LockCheckWarpEvent.release()
 def CheckTarget(x, y, z):
     while True:
         time.sleep(random.randint(3,5))
@@ -65,18 +49,26 @@ def cvName(temp):
     Text=Text[:-1]
     os.remove('Temp.png')
     return Text
-def CheckNothingFound():
-    if (sum(pag.pixel(1586,333))>390 and sum(pag.pixel(1586,333))<400):
-        return True
 @logs
 def RewriteSettings(name, txt):
     config.read('config.ini')
     config.set("General", name, txt)
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
+def GetPIDList(ProcessName):
+    for proc in psutil.process_iter():
+        if ProcessName in proc.name():
+            pid=proc.pid
+            pidsArray.append(pid)
+def GetHWID(NumberWin, pid):
+    def enum_window_callback(hwnd, pid):
+        tid, current_pid = win32process.GetWindowThreadProcessId(hwnd)
+        if pid == current_pid and win32gui.IsWindowVisible(hwnd):
+            windows[NumberWin] = hwnd
+
+    win32gui.EnumWindows(enum_window_callback, pid)
 def ActivateWindow(hwnd):
     try:
-        logging.info('Active Window')
         win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
         win32gui.SetForegroundWindow(hwnd)
     except IndexError:

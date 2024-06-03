@@ -17,9 +17,3 @@ def logs(fn):
         print(f'{fn.__name__}')
         # logsFunction(LogsFileName, fn)
     return wrapper
-def WinActive(fn):
-    def wrapper(*args, **kwargs):
-        fn(*args, **kwargs)
-        
-        
-    return wrapper
