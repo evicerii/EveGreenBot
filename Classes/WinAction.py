@@ -15,10 +15,9 @@ ScreenClassArray = []
 ProcessName = 'exefile.exe'
 
 class Character:
-    def __init__(self, number, pid, hwnd):
-        self.number = number
+    def __init__(self, number, hwnd):
         self.ProcessName = ProcessName
-        self.pid = pid
+        self.number = number
         self.hwnd = hwnd
     def IMGInvisible(self):
         f = ctypes.windll.dwmapi.DwmGetWindowAttribute
@@ -53,7 +52,29 @@ class Character:
 
         im_scr.save(f'temp.jpeg', 'jpeg')
         return  f'temp.jpeg'
-
+    def CheckWarp(self):
+        time.sleep(10)
+        while True:
+            WindowsClassArray[self.number - 1].IMGInvisible()
+            pix = Image.open('temp.jpeg').load()
+            rgb1 = sum(pix[945, 970])
+            os.remove('temp.jpeg')
+            if rgb1 == 545:
+                time.sleep(1)
+                break
+            else:
+                time.sleep(5)
+        while True:
+            WindowsClassArray[self.number - 1].IMGInvisible()
+            pix = Image.open('temp.jpeg').load()
+            rgb1 = sum(pix[945, 970])
+            os.remove('temp.jpeg')
+            if rgb1 == 545:
+                time.sleep(1)
+            else:
+                time.sleep(10)
+                break
+        ActivateWindow(self.hwnd)
 class ScreenAction():
     def __init__(self):
         ...
@@ -85,5 +106,5 @@ GetPIDList(ProcessName)
 for NumberWin, pid in enumerate(pidsArray, 1):
     GetHWID(NumberWin, pid)
 for win in windows.keys():
-    WindowsClassArray.append(Character(win, pidsArray[win-1], windows[win]))
+    WindowsClassArray.append(Character(win, windows[win]))
     ScreenClassArray.append(ScreenAction())

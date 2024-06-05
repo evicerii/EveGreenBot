@@ -18,7 +18,7 @@ pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
 
 #во всех окнах
 for win in windows.keys():
-    WindowsClassArray.append(Character(win, pidsArray[win-1], windows[win]))
+    WindowsClassArray.append(Character(win, windows[win]))
     WinThreadArray.append(WinThreadClass(win, Ship))
 
 def GreenThread(WinKeys):

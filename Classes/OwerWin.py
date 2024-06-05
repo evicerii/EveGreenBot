@@ -23,8 +23,9 @@ class owerWin(Character):
     def checkElement(self):
         ...
 class AnomalyWin(Character):
-    def __init__(self, name):
+    def __init__(self, name, number, hwnd):
         self.name = name
+        super().__init__(number, hwnd)
     def HideAnomaly(self):
         mouseMove(AnomalyCoord.x,AnomalyCoord.y)
         rightClick()
@@ -38,23 +39,23 @@ class AnomalyWin(Character):
         mouseMove(WarpAnomaly.x,WarpAnomaly.y)
         click()
     @logs
-    def SelectAnomaly(self, hwnd):
+    def SelectAnomaly(self):
         while True:
             name = cvName(FirstAnomalyCoord)
             if name in AnomalyList:
                 self.WarpAnomalyAction()
-                CheckWarp(hwnd)
-                self.OccupiedAnomaly(hwnd)
+                super().CheckWarp()
+                self.OccupiedAnomaly(self.hwnd)
                 break
             elif name=='':
                 return False
             else:
                 self.HideAnomaly()
             time.sleep(1)
-    @logs
     def OccupiedAnomaly(self, hwnd):
         PvPWin.takeActive()
         if sum(pag.pixel(1365,320)) == 765:
+            logging.info(f'Occupied Anomaly')
             self.HideAnomaly()
             self.SelectAnomaly(hwnd)
 class ChatWindows(Character):
@@ -74,6 +75,5 @@ Loot=owerWin('loot',3)
 Structure=owerWin('structure',4)
 PvPWin=owerWin('test',5)
 
-GreenAnomaly=AnomalyWin('green')
 
 LocalChatClass=ChatWindows('localchat', LocalChat)

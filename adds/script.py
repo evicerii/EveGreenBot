@@ -17,24 +17,6 @@ config = configparser.ConfigParser()
 pidsArray=[]
 windows = {}
 
-def CheckWarp(hwnd):
-    time.sleep(10)
-    while True:
-        ActivateWindow(hwnd)
-        rgb1 = sum(pag.pixel(963, 995))
-        if 700<rgb1<710:
-            time.sleep(1)
-            break
-        else:
-            time.sleep(5)
-    while True:
-        ActivateWindow(hwnd)
-        rgb1 = sum(pag.pixel(963, 995))
-        if 700<rgb1<710:
-            time.sleep(1)
-        else:
-            time.sleep(5)
-            break
 def CheckTarget(x, y, z):
     while True:
         time.sleep(random.randint(3,5))

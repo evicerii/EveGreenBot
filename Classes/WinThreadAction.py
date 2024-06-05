@@ -19,6 +19,8 @@ class WinThreadClass(Character):
         self.LocalChatStatus = threading.Event()
         self.ShieldStatus = threading.Event()
         self.OverWinStatus = threading.Event()
+        
+        self.GreenAnomaly=AnomalyWin('green', self.ActiveThread, self.hwnd)
     def StartFarm(self):
         self.LocalChatStatus.clear()
         logging.info(f'StartFarm  {self.ActiveThread}')
@@ -54,7 +56,6 @@ class WinThreadClass(Character):
             self.ship.ActiveDefModule()
     def BotLoop(self):
         logging.info(f'BotLoop  {self.ActiveThread}')
-        print(EndCyrcleEvent)
         if EndCyrcleEvent.is_set():
             logging.info(f'Farm stop  {self.ActiveThread}')
             return
@@ -63,7 +64,7 @@ class WinThreadClass(Character):
             WindowsClassArray[self.ActiveThread].IMGInvisible()    
             ActivateWindow(self.hwnd)
             os.remove('temp.jpeg')
-            if GreenAnomaly.SelectAnomaly(self.hwnd) == False:
+            if self.GreenAnomaly.SelectAnomaly() == False:
                 self.UndockEvent.clear()
                 return
             WindowsClassArray[self.ActiveThread].IMGInvisible()    
