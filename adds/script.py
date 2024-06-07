@@ -2,7 +2,6 @@ import pyautogui as pag
 from .mouseMove.mousemove import *
 from .coordinate import *
 import time
-import pytesseract
 import os
 from PIL import Image
 from .decorators import logs
@@ -23,14 +22,6 @@ def CheckTarget(x, y, z):
         rgb1 = sum(pag.pixel(x,y))
         if rgb1==z:
             break
-def cvName(temp):
-    pag.screenshot('Temp.png',region=temp)
-    Temp=Image.open('Temp.png').convert('L').save('Temp.png')
-    Temp=Image.open('Temp.png')
-    Text = pytesseract.image_to_string(Temp, lang='eng')
-    Text=Text[:-1]
-    os.remove('Temp.png')
-    return Text
 @logs
 def RewriteSettings(name, txt):
     config.read('config.ini')

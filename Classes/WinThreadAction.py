@@ -74,7 +74,7 @@ class WinThreadClass(Character):
                 return
             self.ship.ActivePropModule()
             self.ship.LaunchDrns()
-            Structure.takeActive()
+            StructureNav.takeActive()
             self.ship.OrbitTarget(FirstTarget)
             Farm.takeActive()
             while True:
@@ -93,6 +93,7 @@ class WinThreadClass(Character):
                     self.ship.ReturnDrns(self.hwnd)
                     self.OverWinStatus.clear()
                     return
+            self.ship.RareLoot(self.ActiveThread, self.hwnd)
             self.OverWinStatus.clear()
             logging.info(f'BotLoop cyrcle  {self.ActiveThread}')
             time.sleep(random.randint(600,650)/10)
@@ -107,6 +108,11 @@ class WinThreadClass(Character):
         logging.info(f'ShipDock  {self.ActiveThread}')
         self.UndockEvent.clear()
         time.sleep(random.randint(3000,3600)/10)
+        mouseMove(ShipCargo.x,ShipCargo.y)
+        click()
+        self.ship.UploadCargo()
+        mouseMove(ShipCargo.x,ShipCargo.y)
+        click()
     def ShipDestroy(self, ShieldStatusEvent):
         while True:
             ShieldStatusEvent.wait()

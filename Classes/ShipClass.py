@@ -18,16 +18,16 @@ class shipClass:
     def Undock(self):
             mouseMove(UndockCoordinate.x,UndockCoordinate.y)
             click()
-            CheckTarget(894,863,331)
+            CheckTarget(CheckUndockCoord[0],CheckUndockCoord[1],CheckUndockCoord[2])
             time.sleep(1)
-    @logs
-    def WarpTo(self, LockCheckWarpEvent):
-        mouseMove(WarpTo.x,WarpTo.y)
-        click()
-        logging.info(f'start warp')
-        CheckWarp(LockCheckWarpEvent)
-        logging.info(f'end warp')     
-        time.sleep(1) 
+    # @logs
+    # def WarpTo(self, LockCheckWarpEvent):
+    #     mouseMove(WarpTo.x,WarpTo.y)
+    #     click()
+    #     logging.info(f'start warp')
+    #     # CheckWarp(LockCheckWarpEvent)
+    #     logging.info(f'end warp')     
+    #     time.sleep(1) 
     @logs
     def ActivePropModule(self):
         if self.PropModule == 'True':
@@ -58,7 +58,7 @@ class shipClass:
     @reactionSleepTime
     @logs
     def LockTarget(self):
-        mouseMove(LockTarget.x,LockTarget.y)
+        mouseMove(SelectItemFifthAction.x,SelectItemFifthAction.y)
         click()
         time.sleep(1)
     @reactionSleepTime
@@ -67,7 +67,7 @@ class shipClass:
         mouseMove(LaunchDrones.x,LaunchDrones.y)
         click()
         time.sleep(3)
-        color=sum(pag.pixel(1361,976))
+        color=sum(pag.pixel(LaunchDrnsCoord[0], LaunchDrnsCoord[1]))
         if color!=101:
             self.LaunchDrns()
     @logs
@@ -79,9 +79,30 @@ class shipClass:
         while color==605:
             WindowsClassArray[0].IMGInvisible()
             pix = Image.open('temp.jpeg').load()
-            color=sum(pix[1794, 968])
+            color=sum(pix[ReturnDrnsCoord[0], ReturnDrnsCoord[1]])
             time.sleep(1)
         ActivateWindow(hwnd)
+    @logs
+    def RareLoot(self, ActiveThread, hwnd):
+        Loot.takeActive()
+        if (sum(pag.pixel(RareCheckPosFirst[0], RareCheckPosFirst[1])) == RareCheckPosFirtValue) and (sum(pag.pixel(RareCheckPosSecond[0], RareCheckPosSecond[1])) == RareCheckPosSecondValue):
+            mouseMove(FirstTarget.x, FirstTarget.y + 24*7)
+            click()
+            mouseMove(SelectItemThirdAction.x, SelectItemThirdAction.y)
+            click()
+            while True:
+                time.sleep(1)
+                WindowsClassArray[ActiveThread].IMGInvisible()
+                pix = Image.open('temp.jpeg').load()
+                if sum(pix[CargoShipMarkerCoord[0], CargoShipMarkerCoord[1]]) == CargoShipMarkerColor:
+                    break
+            os.remove('temp.jpeg')
+            time.sleep(2)
+            ActivateWindow(hwnd)
+            mouseMove(WreckLootAll.x,WreckLootAll.y)
+            click()
+            mouseMove(ShipCargo.x,ShipCargo.y)
+            click() 
     @logs
     def Dock(self):
         Nav.takeActive()
@@ -89,27 +110,10 @@ class shipClass:
         click()
         mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
-    def DangerShield(self, x=983, y=875):
-        time.sleep(1)
-        if (700<sum(pag.pixel(x,y))) and (sum(pag.pixel(x, y))<750):
-            ShieldStatusVar = False
-        else:
-            logging.info(f'low shield')
-            ShieldStatusVar = True
-    def OpenCargo(self):
-        mouseMove(ShipCargo.x,ShipCargo.y)
-        click()
-        time.sleep(1)
-    def SelectChipCargo(self):
-        mouseMove()
-        click()
-    @logs
-    def LootAll(self):
-        mouseMove(WreckLootAll.x,WreckLootAll.y)
-        click()
-        time.sleep(1)
     @logs
     def UploadCargo(self):
+        if sum(pag.pixel(286,414)) == 74:
+            return
         mouseMove(SelectAllField.x,SelectAllField.y)
         rightClick()
         SelectAll=boxRelCoordinate(RightFirstRow)
@@ -117,6 +121,22 @@ class shipClass:
         click()
         mouseMove(FirstItem.x,FirstItem.y)
         dragNdrop(Hangars.x,Hangars.y)  
-        
+
+    # def DangerShield(self, x=983, y=875):
+    #     time.sleep(1)
+    #     if (700<sum(pag.pixel(x,y))) and (sum(pag.pixel(x, y))<750):
+    #         ShieldStatusVar = False
+    #     else:
+    #         logging.info(f'low shield')
+    #         ShieldStatusVar = True
+    # def OpenCargo(self):
+    #     mouseMove(ShipCargo.x,ShipCargo.y)
+    #     click()
+    #     time.sleep(1)
+    # def SelectChipCargo(self):
+    #     mouseMove()
+    #     click()
+    # @logs
+            
 Ship = shipClass(config.get('UseShip','ShipName'), config.get('UseShip','PropModule'), config.get('UseShip','DefModule'))
 

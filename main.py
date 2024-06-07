@@ -2,7 +2,7 @@ from FarmThread import *
 from Classes.WinAction import *
 from concurrent.futures import ThreadPoolExecutor
 
-#pyinstaller --add-data "tesseract:tesseract" --add-data "config.ini:."  --add-data "logs:logs" main.py
+#pyinstaller --add-data "config.ini:." --add-data "logs:logs" main.py
 
 def BotExit():
     logging.info(f'BotExit start')

@@ -57,7 +57,7 @@ class Character:
         while True:
             WindowsClassArray[self.number - 1].IMGInvisible()
             pix = Image.open('temp.jpeg').load()
-            rgb1 = sum(pix[945, 970])
+            rgb1 = sum(pix[CheckWarpCoord[0], CheckWarpCoord[1]])
             os.remove('temp.jpeg')
             if rgb1 == 545:
                 time.sleep(1)
@@ -67,7 +67,7 @@ class Character:
         while True:
             WindowsClassArray[self.number - 1].IMGInvisible()
             pix = Image.open('temp.jpeg').load()
-            rgb1 = sum(pix[945, 970])
+            rgb1 = sum(pix[CheckWarpCoord[0], CheckWarpCoord[1]])
             os.remove('temp.jpeg')
             if rgb1 == 545:
                 time.sleep(1)
@@ -81,9 +81,9 @@ class ScreenAction():
         
     def TakeLocalStatus(self, LokalStatus):
         pix = Image.open('temp.jpeg').load()
-        for n in range(754,952,17):
+        for n in range(LocalStatusRange[0], LocalStatusRange[1], LocalStatusRange[2]):
             #Проврка тикеров в чате /red,orange,grey
-            if (pix[321,n]==(79, 5, 6) or pix[321,n]==(146, 69, 27) or pix[321,n]==(103, 103, 103)):
+            if (pix[LocalStatusXCoord,n]==(LocalStatusColorsFirst[0], LocalStatusColorsFirst[1], LocalStatusColorsFirst[2]) or pix[LocalStatusXCoord,n]==(LocalStatusColorsSecond[0], LocalStatusColorsSecond[1], LocalStatusColorsSecond[2]) or pix[LocalStatusXCoord,n]==(LocalStatusColorsThird[0], LocalStatusColorsThird[1], LocalStatusColorsThird[2])):
                 logging.info(f'local red')
                 LokalStatus.set()
     def TakeShieldStatus(self, ShieldStatus):
@@ -95,7 +95,7 @@ class ScreenAction():
             ShieldStatus.clear()
     def TakeOverWinStatus(self, OverWinStatus):
         pix = Image.open('temp.jpeg').load()
-        if (sum(pix[1576,306])) == 402:
+        if (sum(pix(OwerWinStatusPos))) == 402:
             OverWinStatus.set()
     def TakeStatus(self):
         print(self.LokalStatus)

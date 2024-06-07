@@ -14,8 +14,6 @@ config.read('config.ini')
 
 logging.basicConfig(level=logging.INFO, filename=f'logs/{date.today()}.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w')
 
-pytesseract.pytesseract.tesseract_cmd = r'./tesseract/tesseract.exe'
-
 #во всех окнах
 for win in windows.keys():
     WindowsClassArray.append(Character(win, windows[win]))

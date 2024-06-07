@@ -41,20 +41,19 @@ class AnomalyWin(Character):
     @logs
     def SelectAnomaly(self):
         while True:
-            name = cvName(FirstAnomalyCoord)
-            if name in AnomalyList:
+            if (sum(pag.pixel(CheckAnomalyCoordFirst[0], CheckAnomalyCoordFirst[1])) == CheckAnomalyCoordFirstValue[0] and sum(pag.pixel(CheckAnomalyCoordSecond[0], CheckAnomalyCoordSecond[1])) == CheckAnomalyCoordSecondValue[0]) or (sum(pag.pixel(CheckAnomalyCoordFirst[0], CheckAnomalyCoordFirst[1])) == CheckAnomalyCoordFirstValue[1] and sum(pag.pixel(CheckAnomalyCoordSecond[0], CheckAnomalyCoordSecond[1])) == CheckAnomalyCoordSecondValue[1]) or (sum(pag.pixel(CheckAnomalyCoordFirst[0], CheckAnomalyCoordFirst[1])) == CheckAnomalyCoordFirstValue[2] and sum(pag.pixel(CheckAnomalyCoordSecond[0], CheckAnomalyCoordSecond[1])) == CheckAnomalyCoordSecondValue[2]):
                 self.WarpAnomalyAction()
                 super().CheckWarp()
                 self.OccupiedAnomaly(self.hwnd)
                 break
-            elif name=='':
-                return False
-            else:
+            elif sum(pag.pixel(CheckLastAnomalyCoord[0], CheckLastAnomalyCoord[1])) == CheckLastAnomalyValue:
                 self.HideAnomaly()
+            else:
+                return False
             time.sleep(1)
     def OccupiedAnomaly(self, hwnd):
         PvPWin.takeActive()
-        if sum(pag.pixel(1365,320)) == 765:
+        if sum(pag.pixel(OccupiedAnomalyCoord[0], OccupiedAnomalyCoord[1])) == OccupiedAnomalyValue:
             logging.info(f'Occupied Anomaly')
             self.HideAnomaly()
             self.SelectAnomaly(hwnd)
@@ -72,7 +71,7 @@ class ChatWindows(Character):
 Nav=owerWin('nav',1)
 Farm=owerWin('farm',2)
 Loot=owerWin('loot',3)
-Structure=owerWin('structure',4)
+StructureNav=owerWin('structure',4)
 PvPWin=owerWin('test',5)
 
 
