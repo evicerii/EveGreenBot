@@ -24,7 +24,7 @@ class WinThreadClass(Character):
     def StartFarm(self):
         self.LocalChatStatus.clear()
         if EndCyrcleEvent.is_set():
-            logging.info(f'Farm stop  {self.ActiveThread}')
+            logging.info(f'Farm stop  {self.hwnd}')
             return
         WindowsClassArray[self.ActiveThread].IMGInvisible()
         ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus)
@@ -103,11 +103,11 @@ class WinThreadClass(Character):
             self.ship.RareLoot(self.ActiveThread, self.hwnd)
             self.OverWinStatus.clear()
             TempLock.release()
-            logging.info(f'BotLoop cyrcle  {self.ActiveThread}')
+            logging.info(f'BotLoop cyrcle  {self.hwnd}')
             time.sleep(random.randint(600,650)/10)
     def StopFarm(self):
         TempLock.acquire()
-        logging.info(f'StopFarm  {self.ActiveThread}')
+        logging.info(f'StopFarm  {self.hwnd}')
         if EndCyrcleEvent.is_set():
             logging.info(f'Farm stop  {self.ActiveThread}')
             return
@@ -120,7 +120,8 @@ class WinThreadClass(Character):
         TempLock.acquire()
         while CheckTarget(CheckUndockCoord[0],CheckUndockCoord[1],CheckUndockCoord[2])==True:
             time.sleep(random.randint(20,25)/10)
-        logging.info(f'ShipDock  {self.ActiveThread}')
+        time.sleep(random.randint(20,25))
+        logging.info(f'ShipDock  {self.hwnd}')
         self.UndockEvent.clear()
         mouseMove(ShipCargo.x,ShipCargo.y)
         click()
@@ -134,5 +135,5 @@ class WinThreadClass(Character):
             ShieldStatusEvent.wait()
             if (CheckTarget(1724,321,262) or CheckTarget(1724,321,265)):
                 EndCyrcleEvent.set()
-                logging.info(f'ShipDestroy stop  {self.ActiveThread}')
+                logging.info(f'ShipDestroy stop  {self.hwnd}')
                 return
