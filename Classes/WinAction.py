@@ -17,9 +17,8 @@ ProcessName = 'exefile.exe'
 class Character:
     def __init__(self, number, hwnd):
         self.ProcessName = ProcessName
-        self.number = number
         self.hwnd = hwnd
-    def IMGInvisible(self):
+    def IMGInvisible(self, ActiveThread = 'Temp'):
         f = ctypes.windll.dwmapi.DwmGetWindowAttribute
         rect = ctypes.wintypes.RECT()
         dwma_extended_frame_bounds = 9
@@ -50,52 +49,51 @@ class Character:
         mfcdc.DeleteDC()
         win32gui.ReleaseDC(self.hwnd, hwnddc)
 
-        im_scr.save(f'temp.jpeg', 'jpeg')
-        return  f'temp.jpeg'
-    def CheckWarp(self):
+        im_scr.save(f'{ActiveThread}.jpeg', 'jpeg')
+        return  f'{ActiveThread}.jpeg'
+    def CheckWarp(self, numberWin):
         time.sleep(10)
         while True:
-            WindowsClassArray[self.number - 1].IMGInvisible()
+            WindowsClassArray[numberWin].IMGInvisible()
             pix = Image.open('temp.jpeg').load()
             rgb1 = sum(pix[CheckWarpCoord[0], CheckWarpCoord[1]])
             os.remove('temp.jpeg')
-            if rgb1 == 545:
-                time.sleep(1)
+            if 205 < rgb1 < 240:
+                time.sleep(3)
                 break
             else:
                 time.sleep(5)
         while True:
-            WindowsClassArray[self.number - 1].IMGInvisible()
+            WindowsClassArray[numberWin].IMGInvisible()
             pix = Image.open('temp.jpeg').load()
             rgb1 = sum(pix[CheckWarpCoord[0], CheckWarpCoord[1]])
             os.remove('temp.jpeg')
-            if rgb1 == 545:
+            if 205 < rgb1 < 240:
                 time.sleep(1)
             else:
                 time.sleep(10)
                 break
-        ActivateWindow(self.hwnd)
 class ScreenAction():
     def __init__(self):
         ...
         
-    def TakeLocalStatus(self, LokalStatus):
-        pix = Image.open('temp.jpeg').load()
+    def TakeLocalStatus(self, LokalStatus, ActiveThread = 'Temp'):
+        pix = Image.open(f'{ActiveThread}.jpeg').load()
         for n in range(LocalStatusRange[0], LocalStatusRange[1], LocalStatusRange[2]):
             #Проврка тикеров в чате /red,orange,grey
-            if (pix[LocalStatusXCoord,n]==(LocalStatusColorsFirst[0], LocalStatusColorsFirst[1], LocalStatusColorsFirst[2]) or pix[LocalStatusXCoord,n]==(LocalStatusColorsSecond[0], LocalStatusColorsSecond[1], LocalStatusColorsSecond[2]) or pix[LocalStatusXCoord,n]==(LocalStatusColorsThird[0], LocalStatusColorsThird[1], LocalStatusColorsThird[2])):
+            if (pix[LocalStatusXCoord,n][0]>70):
                 logging.info(f'local red')
                 LokalStatus.set()
-    def TakeShieldStatus(self, ShieldStatus):
-        pix = Image.open('temp.jpeg').load()
+    def TakeShieldStatus(self, ShieldStatus, ActiveThread = 'Temp'):
+        pix = Image.open(f'{ActiveThread}.jpeg').load()
         if (sum(pix[965,850])>700 and sum(pix[965,850])<750) or (sum(pix[966,850])>700 and sum(pix[966,850])<750) or (sum(pix[967,850])>700 and sum(pix[967,850])<750):
             ShieldStatus.set()
         else:
             logging.info(f'low shield')
             ShieldStatus.clear()
-    def TakeOverWinStatus(self, OverWinStatus):
-        pix = Image.open('temp.jpeg').load()
-        if (sum(pix(OwerWinStatusPos))) == 402:
+    def TakeOverWinStatus(self, OverWinStatus, ActiveThread = 'Temp'):
+        pix = Image.open(f'{ActiveThread}.jpeg').load()
+        if (sum(pix[OwerWinStatusPos[0], OwerWinStatusPos[1]])) == OwerWinStatusValue:
             OverWinStatus.set()
     def TakeStatus(self):
         print(self.LokalStatus)

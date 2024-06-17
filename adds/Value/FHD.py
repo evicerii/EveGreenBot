@@ -31,27 +31,26 @@ ReturnDrones=[1871,1885,955,963]
 LaunchwindowValue = [828, 1101, 412, 446]
 LaunchWin=[-1404,-1325,366,382]
 CloseEve=[1885,1915,2,18]
-
+#979,119
 CheckAnomalyCoordFirst = [984,111]
+CheckAnomalyCoordSecond = [974,116]
+CheckAnomalyCoordThierd = [977,115]
 CheckAnomalyCoordFirstValue = [579, 580, 607]
-CheckAnomalyCoordSecond = [1005,114]
-CheckAnomalyCoordSecondValue = [69,74,201]
-
 CheckLastAnomalyCoord = [957,124]
 CheckLastAnomalyValue = 127
 OccupiedAnomalyCoord = [1365,320]
 OccupiedAnomalyValue = 765
+OccupiedIgnoreResultValue=[40,140,75,95]
+
 
 CheckUndockCoord = [894,863,331]
 LaunchDrnsCoord = [1361,976]
 ReturnDrnsCoord = [1794, 968]
-CheckWarpCoord = [945, 970]
+CheckWarpCoord = [928, 956]
 LocalStatusXCoord = 321
-LocalStatusRange = [754,952,17]
+LocalStatusRange = [758,956,17]
 OwerWinStatusPos = [1576,306]
-LocalStatusColorsFirst = [79, 5, 6]
-LocalStatusColorsSecond = [146, 69, 27]
-LocalStatusColorsThird = [103, 103, 103]
+OwerWinStatusValue = 402
 
 RareCheckPosFirst = [1502,480]
 RareCheckPosSecond = [1484,482]

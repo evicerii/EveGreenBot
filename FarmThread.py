@@ -22,7 +22,10 @@ for win in windows.keys():
 def GreenThread(WinKeys):
     ActiveThread = WinKeys - 1
     while True:
+        TempLock.acquire()
         WinThreadArray[ActiveThread].StartFarm()
+        TempLock.release()
+        time.sleep(1)
         WinThreadArray[ActiveThread].BotLoop()
         WinThreadArray[ActiveThread].StopFarm()
         if EndCyrcleEvent.is_set():

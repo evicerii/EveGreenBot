@@ -39,24 +39,35 @@ class AnomalyWin(Character):
         mouseMove(WarpAnomaly.x,WarpAnomaly.y)
         click()
     @logs
-    def SelectAnomaly(self):
+    def SelectAnomaly(self, numberWin, hwnd):
+        TempLock.acquire()
+        time.sleep(10)
         while True:
-            if (sum(pag.pixel(CheckAnomalyCoordFirst[0], CheckAnomalyCoordFirst[1])) == CheckAnomalyCoordFirstValue[0] and sum(pag.pixel(CheckAnomalyCoordSecond[0], CheckAnomalyCoordSecond[1])) == CheckAnomalyCoordSecondValue[0]) or (sum(pag.pixel(CheckAnomalyCoordFirst[0], CheckAnomalyCoordFirst[1])) == CheckAnomalyCoordFirstValue[1] and sum(pag.pixel(CheckAnomalyCoordSecond[0], CheckAnomalyCoordSecond[1])) == CheckAnomalyCoordSecondValue[1]) or (sum(pag.pixel(CheckAnomalyCoordFirst[0], CheckAnomalyCoordFirst[1])) == CheckAnomalyCoordFirstValue[2] and sum(pag.pixel(CheckAnomalyCoordSecond[0], CheckAnomalyCoordSecond[1])) == CheckAnomalyCoordSecondValue[2]):
+            ActivateWindow(hwnd)
+            if (sum(pag.pixel(CheckAnomalyCoordFirst[0], CheckAnomalyCoordFirst[1])) == sum(pag.pixel(CheckAnomalyCoordSecond[0], CheckAnomalyCoordSecond[1])) == sum(pag.pixel(CheckAnomalyCoordThierd[0], CheckAnomalyCoordThierd[1]))):
                 self.WarpAnomalyAction()
-                super().CheckWarp()
-                self.OccupiedAnomaly(self.hwnd)
-                break
+                TempLock.release()
+                logging.info(f'start warp {hwnd}')
+                super().CheckWarp(numberWin)
+                logging.info(f'end warp {hwnd}')
+                TempLock.acquire()
+                ActivateWindow(hwnd)
+                PvPWin.takeActive()
+                if sum(pag.pixel(OccupiedAnomalyCoord[0], OccupiedAnomalyCoord[1])) == OccupiedAnomalyValue:
+                    logging.info(f'Occupied Anomaly')
+                    mouseMove(AnomalyCoord.x,AnomalyCoord.y)
+                    rightClick()
+                    OccupiedIgnoreResult = boxRelCoordinate(OccupiedIgnoreResultValue)
+                    mouseMove(OccupiedIgnoreResult.x,OccupiedIgnoreResult.y)
+                    click()
+                else:
+                    TempLock.release()
+                    break
             elif sum(pag.pixel(CheckLastAnomalyCoord[0], CheckLastAnomalyCoord[1])) == CheckLastAnomalyValue:
                 self.HideAnomaly()
             else:
+                TempLock.release()
                 return False
-            time.sleep(1)
-    def OccupiedAnomaly(self, hwnd):
-        PvPWin.takeActive()
-        if sum(pag.pixel(OccupiedAnomalyCoord[0], OccupiedAnomalyCoord[1])) == OccupiedAnomalyValue:
-            logging.info(f'Occupied Anomaly')
-            self.HideAnomaly()
-            self.SelectAnomaly(hwnd)
 class ChatWindows(Character):
     def __init__(self, name, coordinates):
         self.name = name

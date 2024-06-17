@@ -7,7 +7,6 @@ from Classes.WinAction import *
 
 WinThreadArray = []
 
-EndCyrcleEvent = threading.Event()
 
 class WinThreadClass(Character):
     def __init__(self, WinKeys, AShip):
@@ -20,10 +19,10 @@ class WinThreadClass(Character):
         self.ShieldStatus = threading.Event()
         self.OverWinStatus = threading.Event()
         
+        self.TempLock = threading.Lock()
         self.GreenAnomaly=AnomalyWin('green', self.ActiveThread, self.hwnd)
     def StartFarm(self):
         self.LocalChatStatus.clear()
-        logging.info(f'StartFarm  {self.ActiveThread}')
         if EndCyrcleEvent.is_set():
             logging.info(f'Farm stop  {self.ActiveThread}')
             return
@@ -43,7 +42,6 @@ class WinThreadClass(Character):
             mouseMove(StopShip.x, StopShip.y)
             click()
         time.sleep(random.randint(20,25)/10)
-        ActivateWindow(self.hwnd)
         WindowsClassArray[self.ActiveThread].IMGInvisible()
         ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus)    
         os.remove('temp.jpeg')
@@ -55,49 +53,60 @@ class WinThreadClass(Character):
         else:
             self.ship.ActiveDefModule()
     def BotLoop(self):
-        logging.info(f'BotLoop  {self.ActiveThread}')
         if EndCyrcleEvent.is_set():
             logging.info(f'Farm stop  {self.ActiveThread}')
             return
         while True:
             time.sleep(random.randint(20,25)/10)
-            WindowsClassArray[self.ActiveThread].IMGInvisible()    
-            ActivateWindow(self.hwnd)
+            WindowsClassArray[self.ActiveThread].IMGInvisible()
             os.remove('temp.jpeg')
-            if self.GreenAnomaly.SelectAnomaly() == False:
+            if self.GreenAnomaly.SelectAnomaly(self.ActiveThread, self.hwnd) == False:
                 self.UndockEvent.clear()
                 return
+            TempLock.acquire()
             WindowsClassArray[self.ActiveThread].IMGInvisible()    
             ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus)
             os.remove('temp.jpeg')
             if self.LocalChatStatus.is_set():
                 return
+            ActivateWindow(self.hwnd)
             self.ship.ActivePropModule()
             self.ship.LaunchDrns()
             StructureNav.takeActive()
             self.ship.OrbitTarget(FirstTarget)
             Farm.takeActive()
+            TempLock.release()
+            time.sleep(random.randint(20,25)/10)
             while True:
                 time.sleep(random.randint(20,25)/10)
-                WindowsClassArray[self.ActiveThread].IMGInvisible()
-                ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus)
-                ScreenClassArray[self.ActiveThread].TakeOverWinStatus(self.OverWinStatus)
-                os.remove('temp.jpeg')
+                # logging.info(f'{self.hwnd} check enemy')
+                WindowsClassArray[self.ActiveThread].IMGInvisible(self.ActiveThread)
+                ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.ActiveThread)
+                ScreenClassArray[self.ActiveThread].TakeOverWinStatus(self.OverWinStatus, self.ActiveThread)
+                os.remove(f'{self.ActiveThread}.jpeg')
                 if self.OverWinStatus.is_set():
+                    TempLock.acquire()
                     ActivateWindow(self.hwnd)
                     logging.info(f'red cross not detected  {self.ActiveThread}')
                     self.ship.ReturnDrns(self.hwnd)
+                    TempLock.release()
                     break
                 if self.LocalChatStatus.is_set():
+                    TempLock.acquire()
                     ActivateWindow(self.hwnd)
                     self.ship.ReturnDrns(self.hwnd)
                     self.OverWinStatus.clear()
+                    TempLock.release()
                     return
+            time.sleep(1)
+            TempLock.acquire()
             self.ship.RareLoot(self.ActiveThread, self.hwnd)
             self.OverWinStatus.clear()
+            TempLock.release()
             logging.info(f'BotLoop cyrcle  {self.ActiveThread}')
             time.sleep(random.randint(600,650)/10)
     def StopFarm(self):
+        TempLock.acquire()
         logging.info(f'StopFarm  {self.ActiveThread}')
         if EndCyrcleEvent.is_set():
             logging.info(f'Farm stop  {self.ActiveThread}')
@@ -105,14 +114,21 @@ class WinThreadClass(Character):
         time.sleep(random.randint(20,25)/10)
         ActivateWindow(self.hwnd)
         self.ship.Dock()
+        TempLock.release()
+        
+        time.sleep(30)
+        TempLock.acquire()
+        while CheckTarget(CheckUndockCoord[0],CheckUndockCoord[1],CheckUndockCoord[2])==True:
+            time.sleep(random.randint(20,25)/10)
         logging.info(f'ShipDock  {self.ActiveThread}')
         self.UndockEvent.clear()
-        time.sleep(random.randint(3000,3600)/10)
         mouseMove(ShipCargo.x,ShipCargo.y)
         click()
         self.ship.UploadCargo()
         mouseMove(ShipCargo.x,ShipCargo.y)
         click()
+        TempLock.release()
+        time.sleep(random.randint(3000,3600)/10)
     def ShipDestroy(self, ShieldStatusEvent):
         while True:
             ShieldStatusEvent.wait()

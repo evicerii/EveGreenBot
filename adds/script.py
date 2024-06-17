@@ -10,12 +10,15 @@ import win32con
 import time
 import win32process
 import psutil
-
+import threading
 config = configparser.ConfigParser()
 
 pidsArray=[]
 windows = {}
 
+EndCyrcleEvent = threading.Event()
+TempLock = threading.Lock()
+CheckEnemyLock = threading.Lock()
 def CheckTarget(x, y, z):
     while True:
         time.sleep(random.randint(3,5))
@@ -44,5 +47,8 @@ def ActivateWindow(hwnd):
     try:
         win32gui.ShowWindow(hwnd, win32con.SW_MAXIMIZE)
         win32gui.SetForegroundWindow(hwnd)
+        logging.info(f'ActivateWindow {hwnd}')
     except IndexError:
         logging.error('Окно с указанным идентификатором не найдено.')
+    finally:
+        time.sleep(random.randint(20,25)/10)

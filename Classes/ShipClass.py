@@ -19,7 +19,6 @@ class shipClass:
             mouseMove(UndockCoordinate.x,UndockCoordinate.y)
             click()
             CheckTarget(CheckUndockCoord[0],CheckUndockCoord[1],CheckUndockCoord[2])
-            time.sleep(1)
     # @logs
     # def WarpTo(self, LockCheckWarpEvent):
     #     mouseMove(WarpTo.x,WarpTo.y)
