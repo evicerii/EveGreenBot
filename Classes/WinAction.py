@@ -12,6 +12,7 @@ from adds.script import *
 WindowsClassArray = []
 ScreenClassArray = []
 
+# ProcessName = 'exe_crashmon.exe'
 ProcessName = 'exefile.exe'
 
 class Character:
@@ -77,12 +78,12 @@ class ScreenAction():
     def __init__(self):
         ...
         
-    def TakeLocalStatus(self, LokalStatus, ActiveThread = 'Temp'):
+    def TakeLocalStatus(self, LokalStatus, hwnd, ActiveThread = 'Temp'):
         pix = Image.open(f'{ActiveThread}.jpeg').load()
         for n in range(LocalStatusRange[0], LocalStatusRange[1], LocalStatusRange[2]):
             #Проврка тикеров в чате /red,orange,grey
             if (pix[LocalStatusXCoord,n][0]>70):
-                logging.info(f'local red')
+                logging.info(f'local red {hwnd}')
                 LokalStatus.set()
     def TakeShieldStatus(self, ShieldStatus, ActiveThread = 'Temp'):
         pix = Image.open(f'{ActiveThread}.jpeg').load()

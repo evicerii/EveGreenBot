@@ -23,6 +23,7 @@ if ScreenX==1920 and ScreenY==1080:
     from adds.Value.FHD import *
     #Static Coordinate
     UndockCoordinate=boxCoordinate(Undock)
+    UndockCoordinate1=boxCoordinate(Undock1)
     # WarpTo=boxCoordinate(WarpTo)
     SelectItemFirstAction=boxCoordinate(SelectItemFirstAction)
     SelectItemThirdAction=boxCoordinate(SelectItemThirdAction)
@@ -72,6 +73,8 @@ if ScreenX==1920 and ScreenY==1080:
     # IfFirstAnomalyWarp=boxCoordinate(IfFirstAnomalyWarp)
 
     LaunchWindow=boxCoordinate(LaunchwindowValue)
+    
+    launchWinsCoords = boxCoordinate(launchWins)
 # elif ScreenX==1600 and ScreenY==800:
 #     UndockCoordinate=boxCoordinate(Undock)
 #     WarpTo=boxCoordinate(WarpTo)

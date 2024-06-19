@@ -25,6 +25,7 @@ def CheckTarget(x, y, z):
         rgb1 = sum(pag.pixel(x,y))
         if rgb1==z:
             break
+    return True
 @logs
 def RewriteSettings(name, txt):
     config.read('config.ini')

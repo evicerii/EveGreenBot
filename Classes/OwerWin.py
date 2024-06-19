@@ -38,12 +38,11 @@ class AnomalyWin(Character):
         WarpAnomaly = boxRelCoordinate(WarpAnomalyString)
         mouseMove(WarpAnomaly.x,WarpAnomaly.y)
         click()
-    @logs
     def SelectAnomaly(self, numberWin, hwnd):
         TempLock.acquire()
+        ActivateWindow(hwnd)
         time.sleep(10)
         while True:
-            ActivateWindow(hwnd)
             if (sum(pag.pixel(CheckAnomalyCoordFirst[0], CheckAnomalyCoordFirst[1])) == sum(pag.pixel(CheckAnomalyCoordSecond[0], CheckAnomalyCoordSecond[1])) == sum(pag.pixel(CheckAnomalyCoordThierd[0], CheckAnomalyCoordThierd[1]))):
                 self.WarpAnomalyAction()
                 TempLock.release()
@@ -54,7 +53,7 @@ class AnomalyWin(Character):
                 ActivateWindow(hwnd)
                 PvPWin.takeActive()
                 if sum(pag.pixel(OccupiedAnomalyCoord[0], OccupiedAnomalyCoord[1])) == OccupiedAnomalyValue:
-                    logging.info(f'Occupied Anomaly')
+                    logging.info(f'Occupied Anomaly {hwnd}')
                     mouseMove(AnomalyCoord.x,AnomalyCoord.y)
                     rightClick()
                     OccupiedIgnoreResult = boxRelCoordinate(OccupiedIgnoreResultValue)
@@ -62,6 +61,7 @@ class AnomalyWin(Character):
                     click()
                 else:
                     TempLock.release()
+                    logging.info(f'Selected Anomaly {hwnd}')
                     break
             elif sum(pag.pixel(CheckLastAnomalyCoord[0], CheckLastAnomalyCoord[1])) == CheckLastAnomalyValue:
                 self.HideAnomaly()

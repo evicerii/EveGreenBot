@@ -16,9 +16,14 @@ class shipClass:
         self.SpecialCargo = True
     @logs
     def Undock(self):
+        time.sleep(1)
+        if sum(pag.pixel(Undock[0],Undock[2]))==262 or sum(pag.pixel(Undock[0],Undock[2]))==265:
             mouseMove(UndockCoordinate.x,UndockCoordinate.y)
             click()
-            CheckTarget(CheckUndockCoord[0],CheckUndockCoord[1],CheckUndockCoord[2])
+        elif sum(pag.pixel(Undock1[0],Undock1[2]))==262 or sum(pag.pixel(Undock1[0],Undock1[2]))==265:
+            mouseMove(UndockCoordinate1.x,UndockCoordinate1.y)
+            click()
+        CheckTarget(CheckUndockCoord[0],CheckUndockCoord[1],CheckUndockCoord[2])
     # @logs
     # def WarpTo(self, LockCheckWarpEvent):
     #     mouseMove(WarpTo.x,WarpTo.y)

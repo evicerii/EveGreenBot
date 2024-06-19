@@ -1,5 +1,6 @@
 #general
 Undock=[1650, 1870, 310, 340]
+Undock1=[1650, 1870, 336, 362]
 StopShip=[910,916,971,976]
 SelectItemFirstAction=[1354,1371,181,192]
 SelectItemSecondAction=[]
@@ -66,6 +67,7 @@ RightFirstRow=[30,121,15,30]
 FirstItem= [260,321,381,443]
 Hangars=[1846,1892,416,426]
 
+launchWins = [205,296,270,297]
 # UndockStation=[1650, 1870, 305, 330]
 # ShipCargo=[0, 43, 370, 397]
 # CargoOrePosition=[260, 317, 388, 437]

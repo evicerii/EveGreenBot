@@ -2,6 +2,8 @@ from FarmThread import *
 from Classes.WinAction import *
 from concurrent.futures import ThreadPoolExecutor
 
+from win32gui import FindWindow, GetWindowRect
+
 #pyinstaller --add-data "config.ini:." --add-data "logs:logs" main.py
 
 def BotExit():
@@ -17,7 +19,9 @@ threads = [BotExitThread]
 if __name__ == '__main__':
     # os.system(f'C:/Users/{os.getlogin()}/AppData/Local/eve-online/eve-online.exe')
     # time.sleep(30)
-    # mouseMove(LaunchWindow.x, LaunchWindow.y)
+    # window_handle = FindWindow(None, "EVE Online Launcher")
+    # window_rect = GetWindowRect(window_handle)
+    # mouseMove(launchWinsCoords.x + window_rect[0],launchWinsCoords.y + window_rect[1])
     # click()
     # time.sleep(60)
     # GetPIDList(ProcessName)
@@ -25,13 +29,25 @@ if __name__ == '__main__':
     #     GetHWID(NumberWin, pid)
     # #во всех окнах
     # for win in windows.keys():
-    #     WindowsClassArray[win-1].TakeWinActive()
-    #     time.sleep(6)
+    #     ActivateWindow(windows[win])
     #     mouseMove(LocalChat.x, LocalChat.y)
     #     click()
+    #     pag.keyDown('ctrl')
+    #     time.sleep(random.randint(10,30)/100)
+    #     pag.keyDown('shift')
+    #     time.sleep(random.randint(10,30)/100)
+    #     pag.press('f9')
+    #     time.sleep(random.randint(10,30)/100)
+    #     pag.keyUp('shift')
+    #     time.sleep(random.randint(10,30)/100)
+    #     pag.keyUp('ctrl')
     #     Ship.Undock()
+    #     mouseMove(StopShip.x, StopShip.y)
+    #     click()
     #     time.sleep(10)
     #     Ship.Dock()
+    # del WindowsClassArray[:]
+    # del ScreenClassArray[:]
     [p.start() for p in threads]
     with ThreadPoolExecutor() as executor:
         executor.map(GreenThread, windows.keys())

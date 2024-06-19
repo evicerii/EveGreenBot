@@ -27,13 +27,14 @@ class WinThreadClass(Character):
             logging.info(f'Farm stop  {self.hwnd}')
             return
         WindowsClassArray[self.ActiveThread].IMGInvisible()
-        ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus)
+        ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.hwnd)
         os.remove('temp.jpeg')
         if self.LocalChatStatus.is_set():
             time.sleep(random.randint(3000,3600)/10)
             self.StartFarm()
             if EndCyrcleEvent.is_set():
                 logging.info(f'CheckLocalFunc stop')
+                return
         else:
             time.sleep(random.randint(20,25)/10)
             ActivateWindow(self.hwnd)
@@ -43,7 +44,7 @@ class WinThreadClass(Character):
             click()
         time.sleep(random.randint(20,25)/10)
         WindowsClassArray[self.ActiveThread].IMGInvisible()
-        ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus)    
+        ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.hwnd)    
         os.remove('temp.jpeg')
         if  self.LocalChatStatus.is_set():
             self.ship.Dock()
@@ -65,9 +66,10 @@ class WinThreadClass(Character):
                 return
             TempLock.acquire()
             WindowsClassArray[self.ActiveThread].IMGInvisible()    
-            ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus)
+            ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.hwnd)
             os.remove('temp.jpeg')
             if self.LocalChatStatus.is_set():
+                TempLock.release()
                 return
             ActivateWindow(self.hwnd)
             self.ship.ActivePropModule()
@@ -79,15 +81,14 @@ class WinThreadClass(Character):
             time.sleep(random.randint(20,25)/10)
             while True:
                 time.sleep(random.randint(20,25)/10)
-                # logging.info(f'{self.hwnd} check enemy')
                 WindowsClassArray[self.ActiveThread].IMGInvisible(self.ActiveThread)
-                ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.ActiveThread)
+                ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.hwnd, self.ActiveThread)
                 ScreenClassArray[self.ActiveThread].TakeOverWinStatus(self.OverWinStatus, self.ActiveThread)
                 os.remove(f'{self.ActiveThread}.jpeg')
                 if self.OverWinStatus.is_set():
                     TempLock.acquire()
                     ActivateWindow(self.hwnd)
-                    logging.info(f'red cross not detected  {self.ActiveThread}')
+                    logging.info(f'red cross not detected  {self.hwnd}')
                     self.ship.ReturnDrns(self.hwnd)
                     TempLock.release()
                     break
@@ -110,6 +111,7 @@ class WinThreadClass(Character):
         logging.info(f'StopFarm  {self.hwnd}')
         if EndCyrcleEvent.is_set():
             logging.info(f'Farm stop  {self.ActiveThread}')
+            TempLock.release()
             return
         time.sleep(random.randint(20,25)/10)
         ActivateWindow(self.hwnd)
