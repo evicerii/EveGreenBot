@@ -62,11 +62,13 @@ class AnomalyWin(Character):
                 else:
                     TempLock.release()
                     logging.info(f'Selected Anomaly {hwnd}')
-                    break
+                    return True
             elif sum(pag.pixel(CheckLastAnomalyCoord[0], CheckLastAnomalyCoord[1])) == CheckLastAnomalyValue:
                 self.HideAnomaly()
+                time.sleep(random.randint(2,5)/10)
             else:
                 TempLock.release()
+                logging.info(f'Last Anomaly Ignored {hwnd}')
                 return False
 class ChatWindows(Character):
     def __init__(self, name, coordinates):

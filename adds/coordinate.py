@@ -60,6 +60,8 @@ if ScreenX==1920 and ScreenY==1080:
     # HangarCargo=boxCoordinate(HangarCargo)
     LaunchDrones=boxCoordinate(LaunchDrones)
     ReturnDrones=boxCoordinate(ReturnDrones)
+    AgreDrones=boxCoordinate(AgreDrones)
+    
     LaunchWin=boxCoordinate(LaunchWin)
     CloseEve=boxCoordinate(CloseEve)
 

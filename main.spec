@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('tesseract', 'tesseract'), ('config.ini', '.'), ('logs', 'logs')],
+    datas=[('config.ini', '.'), ('logs', 'logs')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

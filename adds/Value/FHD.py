@@ -25,17 +25,22 @@ AnomalyCoord=[930,1020,106,124]
 WarpAnomalyString=[40,140,12,26]
 IgnoreResultValue=[40,140,125,140]
 LocalChatValue=[75,126,717,730]
+
+#drones
 LaunchDrones=[1871,1885,894,905]
 ReturnDrones=[1871,1885,955,963]
+AgreDrones=[1822,1832,955,963]
 
 #launcher
 LaunchwindowValue = [828, 1101, 412, 446]
 LaunchWin=[-1404,-1325,366,382]
 CloseEve=[1885,1915,2,18]
 #979,119
-CheckAnomalyCoordFirst = [984,111]
-CheckAnomalyCoordSecond = [974,116]
-CheckAnomalyCoordThierd = [977,115]
+
+CheckAnomalyCoordAlpha = [950, 119]
+CheckAnomalyCoordFirst = [984, 111]
+CheckAnomalyCoordSecond = [974, 116]
+CheckAnomalyCoordThierd = [977, 115]
 CheckAnomalyCoordFirstValue = [579, 580, 607]
 CheckLastAnomalyCoord = [957,124]
 CheckLastAnomalyValue = 127

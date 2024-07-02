@@ -67,6 +67,14 @@ class shipClass:
         time.sleep(1)
     @reactionSleepTime
     @logs
+    def FirstTargetAgreDrones(self):
+        mouseMove(FirstTarget.x, FirstTarget.y)
+        click()
+        self.LockTarget()
+        time.sleep(30)
+        mouseMove(AgreDrones.x, AgreDrones.y)
+        click()
+    @logs
     def LaunchDrns(self):
         mouseMove(LaunchDrones.x,LaunchDrones.y)
         click()
@@ -84,6 +92,7 @@ class shipClass:
             WindowsClassArray[0].IMGInvisible()
             pix = Image.open('temp.jpeg').load()
             color=sum(pix[ReturnDrnsCoord[0], ReturnDrnsCoord[1]])
+            os.remove('temp.jpeg')
             time.sleep(1)
         ActivateWindow(hwnd)
     @logs

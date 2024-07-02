@@ -34,7 +34,7 @@ class WinThreadClass(Character):
             self.StartFarm()
             if EndCyrcleEvent.is_set():
                 logging.info(f'CheckLocalFunc stop')
-                return
+            return
         else:
             time.sleep(random.randint(20,25)/10)
             ActivateWindow(self.hwnd)
@@ -54,10 +54,11 @@ class WinThreadClass(Character):
         else:
             self.ship.ActiveDefModule()
     def BotLoop(self):
-        if EndCyrcleEvent.is_set():
-            logging.info(f'Farm stop  {self.ActiveThread}')
-            return
+        logging.info(f'BotLoop start {self.hwnd}')
         while True:
+            if EndCyrcleEvent.is_set():
+                logging.info(f'Farm stop  {self.ActiveThread}')
+                return
             time.sleep(random.randint(20,25)/10)
             WindowsClassArray[self.ActiveThread].IMGInvisible()
             os.remove('temp.jpeg')
@@ -77,6 +78,7 @@ class WinThreadClass(Character):
             StructureNav.takeActive()
             self.ship.OrbitTarget(FirstTarget)
             Farm.takeActive()
+            self.ship.FirstTargetAgreDrones()
             TempLock.release()
             time.sleep(random.randint(20,25)/10)
             while True:
@@ -84,7 +86,15 @@ class WinThreadClass(Character):
                 WindowsClassArray[self.ActiveThread].IMGInvisible(self.ActiveThread)
                 ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.hwnd, self.ActiveThread)
                 ScreenClassArray[self.ActiveThread].TakeOverWinStatus(self.OverWinStatus, self.ActiveThread)
+                ScreenClassArray[self.ActiveThread].TakeShieldStatus(self.ShieldStatus, self.ActiveThread)
                 os.remove(f'{self.ActiveThread}.jpeg')
+                if self.ShieldStatus.is_set():
+                    TempLock.acquire()
+                    ActivateWindow(self.hwnd)
+                    self.ship.ReturnDrns(self.hwnd)
+                    self.ShieldStatus.clear()
+                    TempLock.release()
+                    return
                 if self.OverWinStatus.is_set():
                     TempLock.acquire()
                     ActivateWindow(self.hwnd)
@@ -109,20 +119,22 @@ class WinThreadClass(Character):
     def StopFarm(self):
         TempLock.acquire()
         logging.info(f'StopFarm  {self.hwnd}')
-        if EndCyrcleEvent.is_set():
-            logging.info(f'Farm stop  {self.ActiveThread}')
-            TempLock.release()
-            return
         time.sleep(random.randint(20,25)/10)
         ActivateWindow(self.hwnd)
         self.ship.Dock()
         TempLock.release()
-        
         time.sleep(30)
-        TempLock.acquire()
-        while CheckTarget(CheckUndockCoord[0],CheckUndockCoord[1],CheckUndockCoord[2])==True:
-            time.sleep(random.randint(20,25)/10)
+        while True:
+            if (sum(pag.pixel(CheckUndockCoord[0],CheckUndockCoord[1]))==CheckUndockCoord[2]):
+                time.sleep(random.randint(20,25)/10)
+            else:
+                TempLock.acquire()
+                logging.info(f'ship docking {self.hwnd}')
+                time.sleep(random.randint(20,25)/10)
+                TempLock.release()
+                break
         time.sleep(random.randint(20,25))
+        TempLock.acquire()
         logging.info(f'ShipDock  {self.hwnd}')
         self.UndockEvent.clear()
         mouseMove(ShipCargo.x,ShipCargo.y)
