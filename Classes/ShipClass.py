@@ -24,27 +24,25 @@ class shipClass:
             mouseMove(UndockCoordinate1.x,UndockCoordinate1.y)
             click()
         CheckTarget(CheckUndockCoord[0],CheckUndockCoord[1],CheckUndockCoord[2])
-    # @logs
-    # def WarpTo(self, LockCheckWarpEvent):
-    #     mouseMove(WarpTo.x,WarpTo.y)
-    #     click()
-    #     logging.info(f'start warp')
-    #     # CheckWarp(LockCheckWarpEvent)
-    #     logging.info(f'end warp')     
-    #     time.sleep(1) 
     @logs
     def ActivePropModule(self):
         if self.PropModule == 'True':
             mouseMove(f1.x,f1.y)
             click()
         time.sleep(1) 
-    @logs
-    def ActiveDefModule(self):
+    def ActiveDefModule(self, hwnd):
         fButton = [f2,f3,f4,f5]
+        fButtonCheck = [f2Check,f3Check,f4Check,f5Check]
         for a in range(0,self.modules):
-            mouseMove(fButton[a].x,fButton[a].y)
-            click()
-        time.sleep(1)
+            Checker = False
+            while Checker == False:
+                mouseMove(fButton[a].x,fButton[a].y)
+                click()
+                time.sleep(1)
+                if sum(pag.pixel(fButtonCheck[a][0], fButtonCheck[a][1])) != 0:
+                    logging.info(f'f{a+2} active {hwnd}')
+                    Checker = True
+            
     @reactionSleepTime
     @logs
     def OrbitTarget(self, target):
@@ -67,60 +65,84 @@ class shipClass:
         time.sleep(1)
     @reactionSleepTime
     @logs
-    def FirstTargetAgreDrones(self):
+    def FirstTargetAgreDrones(self, hwnd):
+        TempLock.acquire()
+        ActivateWindow(hwnd)
         mouseMove(FirstTarget.x, FirstTarget.y)
         click()
         self.LockTarget()
+        TempLock.release()
         time.sleep(30)
+        TempLock.acquire()
+        ActivateWindow(hwnd)
         mouseMove(AgreDrones.x, AgreDrones.y)
         click()
+        TempLock.release()
     @logs
-    def LaunchDrns(self):
+    def LaunchDrns(self, DrnsStatus):
         mouseMove(LaunchDrones.x,LaunchDrones.y)
         click()
         time.sleep(3)
         color=sum(pag.pixel(LaunchDrnsCoord[0], LaunchDrnsCoord[1]))
         if color!=101:
             self.LaunchDrns()
+        DrnsStatus.set()
+    #!!!ВАЖНО
     @logs
-    def ReturnDrns(self, hwnd):
+    def ReturnDrns(self, ActiveThread, hwnd, DrnsStatus, LocalChatStatus):
+        self.ActivePropModule()
+        if LocalChatStatus.is_set():
+            Nav.takeActive()
+            mouseMove(FirstTarget.x,FirstTarget.y)
+            click()
+            self.AprochTarget()
+            PvPWin.takeActive()
         mouseMove(ReturnDrones.x,ReturnDrones.y)
         click()
         color=605
-        time.sleep(5)
+        time.sleep(random.randint(30,40)/10)
         while color==605:
-            WindowsClassArray[0].IMGInvisible()
+            WindowsClassArray[ActiveThread].IMGInvisible()
             pix = Image.open('temp.jpeg').load()
-            color=sum(pix[ReturnDrnsCoord[0], ReturnDrnsCoord[1]])
+            if sum(pix[OwerWinStatusPos[0], OwerWinStatusPos[1]]) != OwerWinStatusValue:
+                color=0
+            else:
+                color=sum(pix[ReturnDrnsCoord[0], ReturnDrnsCoord[1]])
             os.remove('temp.jpeg')
             time.sleep(1)
         ActivateWindow(hwnd)
+        DrnsStatus.clear()
     @logs
+    #24pix
     def RareLoot(self, ActiveThread, hwnd):
         Loot.takeActive()
-        if (sum(pag.pixel(RareCheckPosFirst[0], RareCheckPosFirst[1])) == RareCheckPosFirtValue) and (sum(pag.pixel(RareCheckPosSecond[0], RareCheckPosSecond[1])) == RareCheckPosSecondValue):
-            mouseMove(FirstTarget.x, FirstTarget.y + 24*7)
-            click()
-            mouseMove(SelectItemThirdAction.x, SelectItemThirdAction.y)
-            click()
-            while True:
-                time.sleep(1)
-                WindowsClassArray[ActiveThread].IMGInvisible()
-                pix = Image.open('temp.jpeg').load()
-                if sum(pix[CargoShipMarkerCoord[0], CargoShipMarkerCoord[1]]) == CargoShipMarkerColor:
-                    break
-            os.remove('temp.jpeg')
-            time.sleep(2)
-            ActivateWindow(hwnd)
-            mouseMove(WreckLootAll.x,WreckLootAll.y)
-            click()
-            mouseMove(ShipCargo.x,ShipCargo.y)
-            click() 
+        for i in range(0, 22):
+            if (sum(pag.pixel(RareCheckPosFirst[0], RareCheckPosFirst[1]+24*i)) == RareCheckPosFirtValue) and (sum(pag.pixel(RareCheckPosSecond[0], RareCheckPosSecond[1]+24*i)) == RareCheckPosSecondValue):
+                mouseMove(FirstTarget.x, FirstTarget.y + 24*i)
+                click()
+                mouseMove(SelectItemThirdAction.x, SelectItemThirdAction.y)
+                click()
+                while True:
+                    time.sleep(1)
+                    WindowsClassArray[ActiveThread].IMGInvisible()
+                    pix = Image.open('temp.jpeg').load()
+                    if sum(pix[CargoShipMarkerCoord[0], CargoShipMarkerCoord[1]]) == CargoShipMarkerColor:
+                        break
+                os.remove('temp.jpeg')
+                time.sleep(2)
+                ActivateWindow(hwnd)
+                mouseMove(WreckLootAll.x,WreckLootAll.y)
+                click()
+                mouseMove(ShipCargo.x,ShipCargo.y)
+                click() 
     @logs
-    def Dock(self):
-        Nav.takeActive()
-        mouseMove(FirstTarget.x,FirstTarget.y)
-        click()
+    def Dock(self, DronsLaunchStatus, LocalChatStatus):
+        if DronsLaunchStatus.is_set() and LocalChatStatus.is_set():
+            ...
+        else:
+            Nav.takeActive()
+            mouseMove(FirstTarget.x,FirstTarget.y)
+            click()
         mouseMove(SelectItemThirdAction.x,SelectItemThirdAction.y)
         click()
     @logs

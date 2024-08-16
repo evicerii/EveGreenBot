@@ -1,7 +1,5 @@
 import ctypes, win32ui
 from ctypes import windll
-import threading
-
 from PIL import Image
 import win32gui
 import logging
@@ -12,11 +10,10 @@ from adds.script import *
 WindowsClassArray = []
 ScreenClassArray = []
 
-# ProcessName = 'exe_crashmon.exe'
 ProcessName = 'exefile.exe'
 
 class Character:
-    def __init__(self, number, hwnd):
+    def __init__(self, hwnd):
         self.ProcessName = ProcessName
         self.hwnd = hwnd
     def IMGInvisible(self, ActiveThread = 'temp'):
@@ -74,6 +71,7 @@ class Character:
             else:
                 time.sleep(10)
                 break
+
 class ScreenAction():
     def __init__(self):
         ...
@@ -87,7 +85,6 @@ class ScreenAction():
                 LokalStatus.set()
     def TakeShieldStatus(self, ShieldStatus, ActiveThread = 'Temp'):
         pix = Image.open(f'{ActiveThread}.jpeg').load()
-        # or (sum(pix[966,850])>760 and sum(pix[966,850])<770) or (sum(pix[967,850])>760 and sum(pix[967,850])<770)
         if (sum(pix[965,850])>700 and sum(pix[965,850])<800) or (sum(pix[966,850])>700 and sum(pix[966,850])<800) or (sum(pix[967,850])>700 and sum(pix[967,850])<800):
             ...
         else:
@@ -103,8 +100,9 @@ class ScreenAction():
         print(self.OverWinStatus)
 
 GetPIDList(ProcessName)
-for NumberWin, pid in enumerate(pidsArray, 1):
-    GetHWID(NumberWin, pid)
-for win in windows.keys():
-    WindowsClassArray.append(Character(win, windows[win]))
+for pid in pidsArray:
+    GetHWID(pid)
+for hwnd in windows:
+    WindowsClassArray.append(Character(hwnd))
     ScreenClassArray.append(ScreenAction())
+    

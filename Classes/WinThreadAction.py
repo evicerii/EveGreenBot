@@ -11,13 +11,14 @@ WinThreadArray = []
 class WinThreadClass(Character):
     def __init__(self, WinKeys, AShip):
         self.ship = AShip
-        self.ActiveThread = WinKeys-1
-        self.hwnd = WindowsClassArray[WinKeys-1].hwnd
+        self.ActiveThread = WinKeys
+        self.hwnd = WindowsClassArray[WinKeys].hwnd
 
         self.UndockEvent = threading.Event()
         self.LocalChatStatus = threading.Event()
         self.ShieldStatus = threading.Event()
         self.OverWinStatus = threading.Event()
+        self.DronsLaunchStatus = threading.Event()
         
         self.TempLock = threading.Lock()
         self.GreenAnomaly=AnomalyWin('green', self.ActiveThread, self.hwnd)
@@ -27,6 +28,7 @@ class WinThreadClass(Character):
             logging.info(f'Farm stop  {self.hwnd}')
             return
         WindowsClassArray[self.ActiveThread].IMGInvisible()
+        print(1)
         ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.hwnd)
         os.remove('temp.jpeg')
         if self.LocalChatStatus.is_set():
@@ -47,14 +49,14 @@ class WinThreadClass(Character):
         ScreenClassArray[self.ActiveThread].TakeLocalStatus(self.LocalChatStatus, self.hwnd)    
         os.remove('temp.jpeg')
         if  self.LocalChatStatus.is_set():
-            self.ship.Dock()
+            self.ship.Dock(self.DronsLaunchStatus, self.LocalChatStatus)
             self.UndockEvent.clear()
             time.sleep(random.randint(3000,3600)/10)
             self.self.StartFarm()
         else:
-            self.ship.ActiveDefModule()
+            self.ship.ActiveDefModule(self.hwnd)
     def BotLoop(self):
-        logging.info(f'BotLoop start {self.hwnd}')
+        logging.info(f'BotLoop start {self.hwnd} {self.ActiveThread}')
         while True:
             if EndCyrcleEvent.is_set():
                 logging.info(f'Farm stop  {self.ActiveThread}')
@@ -74,12 +76,12 @@ class WinThreadClass(Character):
                 return
             ActivateWindow(self.hwnd)
             self.ship.ActivePropModule()
-            self.ship.LaunchDrns()
+            self.ship.LaunchDrns(self.DronsLaunchStatus)
             StructureNav.takeActive()
             self.ship.OrbitTarget(FirstTarget)
             Farm.takeActive()
-            self.ship.FirstTargetAgreDrones()
             TempLock.release()
+            self.ship.FirstTargetAgreDrones(self.hwnd)
             time.sleep(random.randint(20,25)/10)
             while True:
                 time.sleep(random.randint(20,25)/10)
@@ -91,7 +93,8 @@ class WinThreadClass(Character):
                 if self.ShieldStatus.is_set():
                     TempLock.acquire()
                     ActivateWindow(self.hwnd)
-                    self.ship.ReturnDrns(self.hwnd)
+                    self.ship.ReturnDrns(self.ActiveThread, self.hwnd, self.DronsLaunchStatus, self.LocalChatStatus)
+                    logging.info(f'shield status warning {self.hwnd}')
                     self.ShieldStatus.clear()
                     TempLock.release()
                     return
@@ -99,13 +102,13 @@ class WinThreadClass(Character):
                     TempLock.acquire()
                     ActivateWindow(self.hwnd)
                     logging.info(f'red cross not detected  {self.hwnd}')
-                    self.ship.ReturnDrns(self.hwnd)
+                    self.ship.ReturnDrns(self.ActiveThread, self.hwnd, self.DronsLaunchStatus, self.LocalChatStatus)
                     TempLock.release()
                     break
                 if self.LocalChatStatus.is_set():
                     TempLock.acquire()
                     ActivateWindow(self.hwnd)
-                    self.ship.ReturnDrns(self.hwnd)
+                    self.ship.ReturnDrns(self.ActiveThread, self.hwnd, self.DronsLaunchStatus, self.LocalChatStatus)
                     self.OverWinStatus.clear()
                     TempLock.release()
                     return
@@ -115,13 +118,13 @@ class WinThreadClass(Character):
             self.OverWinStatus.clear()
             TempLock.release()
             logging.info(f'BotLoop cyrcle  {self.hwnd}')
-            time.sleep(random.randint(600,650)/10)
+            time.sleep(random.randint(30,70)/10)
     def StopFarm(self):
         TempLock.acquire()
         logging.info(f'StopFarm  {self.hwnd}')
         time.sleep(random.randint(20,25)/10)
         ActivateWindow(self.hwnd)
-        self.ship.Dock()
+        self.ship.Dock(self.DronsLaunchStatus, self.LocalChatStatus)
         TempLock.release()
         time.sleep(30)
         while True:
@@ -134,15 +137,15 @@ class WinThreadClass(Character):
                 TempLock.release()
                 break
         time.sleep(random.randint(20,25))
-        TempLock.acquire()
+        # TempLock.acquire()
         logging.info(f'ShipDock  {self.hwnd}')
         self.UndockEvent.clear()
-        mouseMove(ShipCargo.x,ShipCargo.y)
-        click()
-        self.ship.UploadCargo()
-        mouseMove(ShipCargo.x,ShipCargo.y)
-        click()
-        TempLock.release()
+        # mouseMove(ShipCargo.x,ShipCargo.y)
+        # click()
+        # self.ship.UploadCargo()
+        # mouseMove(ShipCargo.x,ShipCargo.y)
+        # click()
+        # TempLock.release()
         time.sleep(random.randint(3000,3600)/10)
     def ShipDestroy(self, ShieldStatusEvent):
         while True:
@@ -151,3 +154,49 @@ class WinThreadClass(Character):
                 EndCyrcleEvent.set()
                 logging.info(f'ShipDestroy stop  {self.hwnd}')
                 return
+    def relogin(self, numberWin, status):
+        tempColor = 0
+        WindowsClassArray[numberWin].IMGInvisible('checkActiveWin')
+        tempColor = sum(pix[logOff[0],logOff[1]])
+        os.remove('checkActiveWin.jpeg')
+        mouseMove(DropWindow)
+        click()
+        if 260<tempColor<270:
+            login()
+            tempColor = 0
+        temp1=[]
+        ActualInfoHWID(ProcessName)
+        for win in windows:
+            temp1.append(windows[win])
+        time.sleep(60)
+        ActualInfoHWID(ProcessName)
+        temp2 = windows
+        temp3 = []
+        for element in temp2:
+            if element not in temp1:
+                temp3.append(element)
+        while tempColor != 543:
+            WindowsClassArray[numberWin].IMGInvisible('checkActiveWin')
+            pix = Image.open('checkActiveWin.jpeg').load()
+            tempColor = sum(pix[checkLogin[0],checkLogin[1]])
+            os.remove('checkActiveWin.jpeg')
+            time.sleep(1)
+        ActivateWindow(temp3[0])
+        time.sleep(3)
+        mouseMove(LocalChat.x, LocalChat.y)
+        click()
+        if status=='dock':
+            return
+        elif status=='undock':
+            Activate2D()
+            self.ship.ActiveDefModule()
+            super.CheckWarp(numberWin)
+            return
+        elif status=='dronesLaunched':
+            Activate2D()
+            self.ship.ActiveDefModule()
+            super.CheckWarp(numberWin)
+            self.ship.LaunchDrns()
+            return
+        else:
+            self.ship.Dock(self.DronsLaunchStatus)

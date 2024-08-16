@@ -11,10 +11,12 @@ import time
 import win32process
 import psutil
 import threading
+from win32gui import FindWindow, GetWindowRect
+
 config = configparser.ConfigParser()
 
 pidsArray=[]
-windows = {}
+windows = []
 
 EndCyrcleEvent = threading.Event()
 TempLock = threading.Lock()
@@ -37,11 +39,11 @@ def GetPIDList(ProcessName):
         if ProcessName in proc.name():
             pid=proc.pid
             pidsArray.append(pid)
-def GetHWID(NumberWin, pid):
+def GetHWID(pid):
     def enum_window_callback(hwnd, pid):
         tid, current_pid = win32process.GetWindowThreadProcessId(hwnd)
         if pid == current_pid and win32gui.IsWindowVisible(hwnd):
-            windows[NumberWin] = hwnd
+            windows.append(hwnd)
 
     win32gui.EnumWindows(enum_window_callback, pid)
 def ActivateWindow(hwnd):
@@ -53,3 +55,29 @@ def ActivateWindow(hwnd):
         logging.error('Окно с указанным идентификатором не найдено.')
     finally:
         time.sleep(random.randint(20,25)/10)
+def Activate2D():
+    pag.keyDown('ctrl')
+    time.sleep(random.randint(10,30)/100)
+    pag.keyDown('shift')
+    time.sleep(random.randint(10,30)/100)
+    pag.press('f9')
+    time.sleep(random.randint(10,30)/100)
+    pag.keyUp('shift')
+    time.sleep(random.randint(10,30)/100)
+    pag.keyUp('ctrl')
+def ActualInfoHWID(ProcessName):
+    pidsArray.clear()
+    windows.clear()
+    GetPIDList(ProcessName)
+    for NumberWin, pid in enumerate(pidsArray, 1):
+        GetHWID(NumberWin, pid)
+def login():
+    mouseMove(DropWindow)
+    click()
+    os.system(f'C:/Users/{os.getlogin()}/AppData/Local/eve-online/eve-online.exe')
+    time.sleep(30)
+    window_handle = FindWindow(None, "EVE Online Launcher")
+    window_rect = GetWindowRect(window_handle)
+    mouseMove(launchWinsCoords.x + window_rect[0],launchWinsCoords.y + window_rect[1])
+    click()
+    time.sleep(60)

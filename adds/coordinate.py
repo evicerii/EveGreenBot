@@ -70,6 +70,7 @@ if ScreenX==1920 and ScreenY==1080:
     SelectAllField=boxCoordinate(SelectAllField)
     Hangars=boxCoordinate(Hangars)
 
+    FittingCoord = boxCoordinate(FittingCoord)
     AnomalyCoord=boxCoordinate(AnomalyCoord)
     # FirstAnomalyWarp=boxCoordinate(FirstAnomalyWarp)
     # IfFirstAnomalyWarp=boxCoordinate(IfFirstAnomalyWarp)
@@ -77,6 +78,7 @@ if ScreenX==1920 and ScreenY==1080:
     LaunchWindow=boxCoordinate(LaunchwindowValue)
     
     launchWinsCoords = boxCoordinate(launchWins)
+    DropWindow = boxCoordinate(DropWindow)
 # elif ScreenX==1600 and ScreenY==800:
 #     UndockCoordinate=boxCoordinate(Undock)
 #     WarpTo=boxCoordinate(WarpTo)

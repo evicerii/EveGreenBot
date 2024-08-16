@@ -1,5 +1,3 @@
-import threading
-
 from adds.coordinate import *
 from adds.script import *
 from adds.decorators import *
@@ -15,9 +13,10 @@ config.read('config.ini')
 logging.basicConfig(level=logging.INFO, filename=f'logs/{date.today()}.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w')
 
 #во всех окнах
-for win in windows.keys():
-    WindowsClassArray.append(Character(win, windows[win]))
-    WinThreadArray.append(WinThreadClass(win, Ship))
+a=0
+for win in windows:
+    WinThreadArray.append(WinThreadClass(a, Ship))
+    a=a+1
 
 def GreenThread(WinKeys):
     ActiveThread = WinKeys - 1

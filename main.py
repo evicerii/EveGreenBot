@@ -2,7 +2,6 @@ from FarmThread import *
 from Classes.WinAction import *
 from concurrent.futures import ThreadPoolExecutor
 
-from win32gui import FindWindow, GetWindowRect
 
 #pyinstaller --add-data "config.ini:." --add-data "logs:logs" main.py
 
@@ -15,7 +14,6 @@ def BotExit():
 
 BotExitThread = threading.Thread(target=BotExit)
 threads = [BotExitThread]
-
 if __name__ == '__main__':
     # os.system(f'C:/Users/{os.getlogin()}/AppData/Local/eve-online/eve-online.exe')
     # time.sleep(30)
@@ -24,30 +22,24 @@ if __name__ == '__main__':
     # mouseMove(launchWinsCoords.x + window_rect[0],launchWinsCoords.y + window_rect[1])
     # click()
     # time.sleep(60)
-    # GetPIDList(ProcessName)
-    # for NumberWin, pid in enumerate(pidsArray, 1):
-    #     GetHWID(NumberWin, pid)
-    # #во всех окнах
-    # for win in windows.keys():
-    #     ActivateWindow(windows[win])
-    #     mouseMove(LocalChat.x, LocalChat.y)
-    #     click()
-    #     pag.keyDown('ctrl')
-    #     time.sleep(random.randint(10,30)/100)
-    #     pag.keyDown('shift')
-    #     time.sleep(random.randint(10,30)/100)
-    #     pag.press('f9')
-    #     time.sleep(random.randint(10,30)/100)
-    #     pag.keyUp('shift')
-    #     time.sleep(random.randint(10,30)/100)
-    #     pag.keyUp('ctrl')
-    #     Ship.Undock()
-    #     mouseMove(StopShip.x, StopShip.y)
-    #     click()
-    #     time.sleep(10)
-    #     Ship.Dock()
-    # del WindowsClassArray[:]
-    # del ScreenClassArray[:]
+    #во всех окнах
+    for index, win in enumerate(windows):
+        ActivateWindow(win)
+        # click()
+        # Activate2D()
+        # Ship.Undock()
+        # mouseMove(StopShip.x, StopShip.y)
+        # click()
+        # time.sleep(10)
+        # mouseMove(StopShip.x, StopShip.y)
+        # click()
+        # time.sleep(10)
+        # Ship.Dock(WinThreadArray[index].DronsLaunchStatus, WinThreadArray[index].LocalChatStatus)
     [p.start() for p in threads]
+    i=1
+    indexWindows=[]
+    for win in windows:
+        indexWindows.append(i)
+        i+=1
     with ThreadPoolExecutor() as executor:
-        executor.map(GreenThread, windows.keys())
+        executor.map(GreenThread, indexWindows)

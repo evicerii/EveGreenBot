@@ -9,11 +9,17 @@ SelectItemFourthAction=[1465,1480,181,192]
 SelectItemFifthAction=[1500,1519,177,197]
 SelectItemSixthAction=[]
 f1=[1054,1076,973,994]
+f1Check = []
 f2=[1105,1127,973,994]
+f2Check = [1115,1006]
 f3=[1156,1178,973,994]
+f3Check = [1166, 1006]
 f4=[1207,1229,973,994]
+f4Check = [1217, 1006]
 f5=[1258,1280,973,994]
+f5Check = []
 f6=[1309,1331,973,994]
+f6Check = []
 FirstTarget= [1405,1781,306,325]
 OwerWindow1= [1350, 1354, 252, 259]
 OwerWindow2= [1382, 1386, 252, 261]
@@ -34,7 +40,10 @@ AgreDrones=[1822,1832,955,963]
 #launcher
 LaunchwindowValue = [828, 1101, 412, 446]
 LaunchWin=[-1404,-1325,366,382]
+DropWindow=[0,1,0,1]
 CloseEve=[1885,1915,2,18]
+logOff=[850, 600]
+checkLogin=[24,308]
 #979,119
 
 CheckAnomalyCoordAlpha = [950, 119]
@@ -48,6 +57,7 @@ OccupiedAnomalyCoord = [1365,320]
 OccupiedAnomalyValue = 765
 OccupiedIgnoreResultValue=[40,140,75,95]
 
+CheckResistanceON = [1889,437]
 
 CheckUndockCoord = [894,863,331]
 LaunchDrnsCoord = [1361,976]
@@ -58,8 +68,8 @@ LocalStatusRange = [758,956,17]
 OwerWinStatusPos = [1576,306]
 OwerWinStatusValue = 402
 
-RareCheckPosFirst = [1502,480]
-RareCheckPosSecond = [1484,482]
+RareCheckPosFirst = [1502,312]
+RareCheckPosSecond = [1484,314]
 RareCheckPosFirtValue = 695
 RareCheckPosSecondValue = 687
 CargoShipMarkerCoord = [110,339]
@@ -71,6 +81,9 @@ SelectAllField=[327,335,383,438]
 RightFirstRow=[30,121,15,30]
 FirstItem= [260,321,381,443]
 Hangars=[1846,1892,416,426]
+
+FittingCoord = [10, 36, 609, 639]
+FittingOpenCheck = [550, 852]
 
 launchWins = [205,296,270,297]
 # UndockStation=[1650, 1870, 305, 330]

@@ -25,7 +25,7 @@ class owerWin(Character):
 class AnomalyWin(Character):
     def __init__(self, name, number, hwnd):
         self.name = name
-        super().__init__(number, hwnd)
+        super().__init__(hwnd)
     def HideAnomaly(self):
         mouseMove(AnomalyCoord.x,AnomalyCoord.y)
         rightClick()
@@ -70,6 +70,7 @@ class AnomalyWin(Character):
                 TempLock.release()
                 logging.info(f'Last Anomaly Ignored {hwnd}')
                 return False
+
 class ChatWindows(Character):
     def __init__(self, name, coordinates):
         self.name = name
